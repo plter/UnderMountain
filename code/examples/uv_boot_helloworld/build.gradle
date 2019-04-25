@@ -11,25 +11,26 @@ kotlin {
     // For Windows, should be changed to e.g. mingwX64
     macosX64("macos") {
         binaries {
-            executable() {
+            executable {
                 // Change to specify fully qualified name of your application's entry point:
-                entryPoint = 'com.plter.um.appmain.main'
+                entryPoint = 'sample.main'
                 // Specify command-line arguments, if necessary:
                 runTask?.args('')
             }
         }
         compilations.main {
             cinterops {
-                httpParser {}
-                uv {}
+                uv_boot {}
             }
         }
     }
     sourceSets {
         // Note: To enable common source sets please comment out 'kotlin.import.noCommonSourceSets' property
         // in gradle.properties file and re-import your project in IDE.
-        macosMain {}
-        macosTest {}
+        macosMain {
+        }
+        macosTest {
+        }
     }
 }
 
