@@ -18,7 +18,7 @@ int message_complete_callback(http_parser *parser) {
     uv_buf_t buf;
     buf.base = respContent;
     buf.len = strlen(buf.base);
-    uv_write(&request->write, &request->stream, &buf, 1, on_html_write);
+    uv_write(&request->write, &request->client, &buf, 1, on_html_write);
     return 0;
 }
 

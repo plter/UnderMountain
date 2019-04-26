@@ -34,7 +34,7 @@ typedef struct {
 */
 typedef struct {
     uv_write_t write;
-    uv_stream_t stream;
+    uv_stream_t client;
     http_parser parser;
     char *url;
     char *method;
@@ -50,5 +50,9 @@ void on_close(uv_handle_t *handle);
 void on_html_write(uv_write_t *write, int status);
 
 int start_server(char *host, int port, http_cb on_message_complete_callback);
+
+void uv_boot_write(http_parser *parser, char *data, int data_len);
+
+void uv_boot_end(http_parser *parser, char *data, int data_len);
 
 #endif //UV_BOOT_HTTP_SERVER_H

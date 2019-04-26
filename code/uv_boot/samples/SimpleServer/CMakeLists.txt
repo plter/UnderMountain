@@ -3,7 +3,7 @@ project(uv_boot_simple_server C)
 
 set(CMAKE_C_STANDARD 11)
 
-link_libraries(uv_boot)
+link_libraries(uv uv_boot)
 
 add_executable(
         simple_server

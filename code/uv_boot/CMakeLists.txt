@@ -12,10 +12,6 @@ link_directories(
         /usr/local/Cellar/libuv/1.28.0/lib
 )
 
-link_libraries(
-        uv
-)
-
 
 add_library(
         uv_boot

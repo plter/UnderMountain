@@ -69,13 +69,13 @@ void on_read(uv_stream_t *stream, ssize_t nread, const uv_buf_t *buf) {
                 &http_request->parser, &parser_settings, buf->base, (size_t) nread);
         if (parsed < nread) {
             fprintf(stderr, "parse error");
-            uv_close((uv_handle_t *) &http_request->stream, on_close);
+            uv_close((uv_handle_t *) &http_request->client, on_close);
         }
     } else {
         if (nread != UV_EOF) {
             UV_ERR(nread, "Read error");
         }
-        uv_close((uv_handle_t *) &http_request->stream, on_close);
+        uv_close((uv_handle_t *) &http_request->client, on_close);
     }
 
     if (NULL != buf->base) {
@@ -354,19 +354,19 @@ int on_message_complete(http_parser *parser) {
         http_request->resp_buf[1].len = (size_t) input_file_size;
 
         /* lets send our short http hello world response and close the socket */
-        uv_write(&http_request->write, &http_request->stream, http_request->resp_buf, 2, on_html_write);
+        uv_write(&http_request->write, &http_request->client, http_request->resp_buf, 2, on_html_write);
     } else if (0 == strcmp(http_request->url, "/favicon.ico")) {
         printf("favicon");
         http_request->resp_buf[0].base = HTTP_HEADER;
         http_request->resp_buf[0].len = sizeof(HTTP_HEADER) - 1;
         /* lets send our short http hello world response and close the socket */
-        uv_write(&http_request->write, &http_request->stream, http_request->resp_buf, 1, on_get_write);
+        uv_write(&http_request->write, &http_request->client, http_request->resp_buf, 1, on_get_write);
     } else {
         printf("undefined url: %s", http_request->url);
         http_request->resp_buf[0].base = HTTP_HEADER;
         http_request->resp_buf[0].len = sizeof(HTTP_HEADER) - 1;
         /* lets send our short http hello world response and close the socket */
-        uv_write(&http_request->write, &http_request->stream, http_request->resp_buf, 1, on_get_write);
+        uv_write(&http_request->write, &http_request->client, http_request->resp_buf, 1, on_get_write);
     }
 
     return 0;
@@ -382,15 +382,15 @@ void on_connect(uv_stream_t *server_handle, int status) {
     http_request_t *http_request = malloc(sizeof(http_request_t));
 
     /* create an extra tcp handle for the http_request */
-    uv_tcp_init(uv_loop, (uv_tcp_t *) &http_request->stream);
+    uv_tcp_init(uv_loop, (uv_tcp_t *) &http_request->client);
 
     /* set references so we can use our http_request in http_parser and libuv */
-    http_request->stream.data = http_request;
+    http_request->client.data = http_request;
     http_request->parser.data = http_request;
     http_request->write.data = http_request;
 
     /* accept the created http_request */
-    ret = uv_accept(server_handle, &http_request->stream);
+    ret = uv_accept(server_handle, &http_request->client);
     if (0 == ret) {
         http_request->url = NULL;
         http_request->method = NULL;
@@ -405,10 +405,10 @@ void on_connect(uv_stream_t *server_handle, int status) {
         /* initialize our http parser */
         http_parser_init(&http_request->parser, HTTP_REQUEST);
         /* start reading from the tcp http_request socket */
-        uv_read_start(&http_request->stream, alloc_cb, on_read);
+        uv_read_start(&http_request->client, alloc_cb, on_read);
     } else {
         /* we seem to have an error and quit */
-        uv_close((uv_handle_t *) &http_request->stream, on_close);
+        uv_close((uv_handle_t *) &http_request->client, on_close);
         //UV_CHECK(ret, "accept");
     }
 
@@ -458,4 +458,21 @@ int start_server(char *host, int port, http_cb on_message_complete_callback) {
     uv_run(uv_loop, UV_RUN_DEFAULT);
 
     return 0;
+}
+
+
+void uv_boot_write(http_parser *parser, char *data, int32_t data_len) {
+    http_request_t *request = parser->data;
+    uv_buf_t buf;
+    buf.base = data;
+    buf.len = data_len;
+    uv_write(&request->write, &request->client, &buf, 1, NULL);
+}
+
+void uv_boot_end(http_parser *parser, char *data, int data_len) {
+    http_request_t *request = parser->data;
+    uv_buf_t buf;
+    buf.base = data;
+    buf.len = data_len;
+    uv_write(&request->write, &request->client, &buf, 1, on_html_write);
 }
