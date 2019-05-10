@@ -1,5 +1,0 @@
-package = com.plter.um.uv
-compilerOpts = -I/usr/local/Cellar/libuv/1.28.0/include
-linkerOpts = -L/usr/local/Cellar/libuv/1.28.0/lib -luv
-headers = uv.h
-headerFilter = uv.h

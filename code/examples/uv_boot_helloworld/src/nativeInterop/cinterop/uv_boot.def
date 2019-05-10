@@ -1,5 +1,0 @@
-package = com.plter.um.uv_boot
-compilerOpts = -I/usr/local/Cellar/libuv/1.28.0/include -I/Work/gitroot/github/plter/UnderMountain/code/uv_boot/include
-linkerOpts = -L/Work/gitroot/github/plter/UnderMountain/code/uv_boot/cmake-build-debug -luv_boot -L/usr/local/Cellar/libuv/1.28.0/lib -luv
-headers = uv.h uv_boot.h uv_boot/http_server.h uv_boot/http_parser.h
-headerFilter = uv.h uv_boot.h uv_boot/http_server.h uv_boot/http_parser.h

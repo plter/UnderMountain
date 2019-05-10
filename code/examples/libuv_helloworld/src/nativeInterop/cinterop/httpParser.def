@@ -1,5 +1,0 @@
-package = com.plter.um.httpparser
-compilerOpts = -I/Work/gitroot/github/plter/UnderMountain/code/http_parser
-linkerOpts = -L/Work/gitroot/github/plter/UnderMountain/code/http_parser/out -lhttp_parser
-headers = http_parser.h
-headerFilter = http_parser.h
