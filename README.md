@@ -4,6 +4,7 @@ UnderMountain is a full-stack async web server framework
 
 # Thanks to
 
+* [beast](https://github.com/boostorg/beast)
 * [uvbook](https://github.com/nikhilm/uvbook)
 * [libuv-webserver](https://github.com/Akagi201/libuv-webserver)
 * [http-parser](https://github.com/nodejs/http-parser)
