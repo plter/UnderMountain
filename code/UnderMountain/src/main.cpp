@@ -5,12 +5,15 @@
 
 namespace net = boost::asio;            // from <boost/asio.hpp>
 
+#define SERVER_PORT 8080
+#define ADDRESS "0.0.0.0"
+#define STATIC_ROOT "static"
 
 int main(int argc, char *argv[]) {
 
-    auto const address = net::ip::make_address("0.0.0.0");
-    auto const port = static_cast<unsigned short>(8080);
-    auto const doc_root = std::make_shared<std::string>("static");
+    auto const address = net::ip::make_address(ADDRESS);
+    auto const port = static_cast<unsigned short>(SERVER_PORT);
+    auto const doc_root = std::make_shared<std::string>(STATIC_ROOT);
     auto const threads = 2;
 
     // The io_context is required for all I/O
