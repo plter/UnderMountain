@@ -5,7 +5,7 @@
 
 namespace net = boost::asio;            // from <boost/asio.hpp>
 
-#define SERVER_PORT 8080
+#define SERVER_PORT 9000
 #define ADDRESS "0.0.0.0"
 #define STATIC_ROOT "static"
 
