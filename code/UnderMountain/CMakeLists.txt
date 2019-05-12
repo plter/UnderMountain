@@ -11,4 +11,10 @@ link_libraries(
         pthread
 )
 
-add_executable(UnderMountain main.cpp)
+add_executable(
+        UnderMountain
+        src/main.cpp
+        src/tools.cpp
+        src/listener.cpp
+        src/mime_types.cpp
+)
