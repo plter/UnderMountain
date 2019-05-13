@@ -19,7 +19,7 @@
 #include <thread>
 #include <vector>
 #include "tools.h"
-#include "http_request.h"
+#include "http_request.hpp"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
@@ -71,82 +71,24 @@ class session : public std::enable_shared_from_this<session> {
 
 public:
     // Take ownership of the stream
-    session(
-            tcp::socket &&socket,
-            std::shared_ptr<std::string const> const &doc_root)
-            : stream_(std::move(socket)), doc_root_(doc_root), lambda_(*this) {
-    }
+    session(tcp::socket &&socket,
+            std::shared_ptr<std::string const> const &doc_root);
 
     // Start the asynchronous operation
-    void
-    run() {
-        do_read();
-    }
+    void run();
 
-    void
-    do_read() {
-        // Make the request empty before reading,
-        // otherwise the operation behavior is undefined.
-        req_ = {};
+    void do_read();
 
-        // Set the timeout.
-        stream_.expires_after(std::chrono::seconds(30));
-
-        // Read a request
-        http::async_read(stream_, buffer_, req_,
-                         beast::bind_front_handler(
-                                 &session::on_read,
-                                 shared_from_this()));
-    }
-
-    void
-    on_read(
+    void on_read(
             beast::error_code ec,
-            std::size_t bytes_transferred) {
-        boost::ignore_unused(bytes_transferred);
+            std::size_t bytes_transferred);
 
-        // This means they closed the connection
-        if (ec == http::error::end_of_stream)
-            return do_close();
-
-        if (ec)
-            return fail(ec, "read");
-
-        // Send the response
-        handle_request(*doc_root_, std::move(req_), lambda_);
-    }
-
-    void
-    on_write(
+    void on_write(
             bool close,
             beast::error_code ec,
-            std::size_t bytes_transferred) {
-        boost::ignore_unused(bytes_transferred);
+            std::size_t bytes_transferred);
 
-        if (ec)
-            return fail(ec, "write");
-
-        if (close) {
-            // This means we should close the connection, usually because
-            // the response indicated the "Connection: close" semantic.
-            return do_close();
-        }
-
-        // We're done with the response so delete it
-        res_ = nullptr;
-
-        // Read another request
-        do_read();
-    }
-
-    void
-    do_close() {
-        // Send a TCP shutdown
-        beast::error_code ec;
-        stream_.socket().shutdown(tcp::socket::shutdown_send, ec);
-
-        // At this point the connection is closed gracefully
-    }
+    void do_close();
 };
 
 #endif //UNDERMOUNTAIN_SESSION_H

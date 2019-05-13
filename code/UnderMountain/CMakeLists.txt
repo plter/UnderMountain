@@ -17,4 +17,5 @@ add_executable(
         src/tools.cpp
         src/listener.cpp
         src/mime_types.cpp
+        src/session.cpp
 )

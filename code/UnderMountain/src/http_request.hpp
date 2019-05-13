@@ -2,29 +2,17 @@
 // Created by yunp on 2019-05-12.
 //
 
-#ifndef UNDERMOUNTAIN_HTTP_REQUEST_H
-#define UNDERMOUNTAIN_HTTP_REQUEST_H
+#ifndef UNDERMOUNTAIN_HTTP_REQUEST_HPP
+#define UNDERMOUNTAIN_HTTP_REQUEST_HPP
 
 #include <boost/beast/core.hpp>
 #include <boost/beast/http.hpp>
 #include <boost/beast/version.hpp>
-#include <boost/asio/strand.hpp>
-#include <boost/config.hpp>
-#include <algorithm>
-#include <cstdlib>
-#include <functional>
-#include <iostream>
-#include <memory>
-#include <string>
-#include <thread>
-#include <vector>
 #include "tools.h"
 #include "mime_types.h"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
-namespace net = boost::asio;            // from <boost/asio.hpp>
-using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 
 // This function produces an HTTP response for the given
 // request. The type of the response object depends on the
@@ -128,4 +116,4 @@ handle_request(
     return send(std::move(res));
 }
 
-#endif //UNDERMOUNTAIN_HTTP_REQUEST_H
+#endif //UNDERMOUNTAIN_HTTP_REQUEST_HPP
