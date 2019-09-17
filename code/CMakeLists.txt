@@ -1,0 +1,1 @@
+add_library(UMServer cpp/UMServer.cpp)
