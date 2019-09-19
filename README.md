@@ -2,10 +2,16 @@
 UnderMountain is a full-stack async web server framework
 
 
-# Thanks to
+# HelloWorld 
 
-* [beast](https://github.com/boostorg/beast)
-* [uvbook](https://github.com/nikhilm/uvbook)
-* [libuv-webserver](https://github.com/Akagi201/libuv-webserver)
-* [http-parser](https://github.com/nodejs/http-parser)
-* [libuv](https://github.com/libuv/libuv)
+```cpp
+#include <um.h>
+#include <boost/asio/use_awaitable.hpp>
+
+int main() {
+    um::Server server(9000, [](auto req, auto res) -> boost::asio::awaitable<void> {
+        co_await res->end("Hello World");
+    });
+}
+```
+
