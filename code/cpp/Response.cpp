@@ -10,7 +10,7 @@
 um::Response::Response(um::TcpStreamSPtr stream, RequestSPtr request) :
         _stream(std::move(stream)),
         _headerSent(false),
-        _request(request),
+        _request(std::move(request)),
         _httpState(boost::beast::http::status::ok) {
 
     set(boost::beast::http::field::content_type, "text/html");
@@ -58,7 +58,7 @@ const std::map<boost::beast::http::field, std::string> &um::Response::getHeaders
 }
 
 void um::Response::set(boost::beast::http::field key, const std::string &value) {
-    _headers[key] = std::move(value);
+    _headers[key] = value;
 }
 
 
