@@ -7,7 +7,6 @@
 
 int main() {
     um::Server server(9000, [](auto req, auto res) -> boost::asio::awaitable<void> {
-        co_await
-        res->end("Hello World");
+        co_await res->end("Hello World");
     });
 }
