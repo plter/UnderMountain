@@ -9,7 +9,7 @@
 
 um::Response::Response(um::TcpStreamSPtr stream, RequestSPtr request) :
         _stream(std::move(stream)),
-        _headerSent(false),
+        _headDataSent(false),
         _request(std::move(request)),
         _httpState(boost::beast::http::status::ok) {
 
@@ -21,23 +21,24 @@ const um::TcpStreamSPtr &um::Response::getStream() const {
 }
 
 bool um::Response::isHeaderSent() const {
-    return _headerSent;
+    return _headDataSent;
 }
 
 boost::asio::awaitable<void> um::Response::end(std::string data) {
-    if (!_headerSent) {
+    if (!_headDataSent) {
         _beastResponseSPtr = std::make_shared<BeastHttpStringBodyResponse>(
                 _httpState,
                 _request->getBeastRequestSPtr()->version()
         );
-        for (auto const&[key, val]:_headers) {
+        for (auto const&[key, val]:_responseHeaders) {
             _beastResponseSPtr->set(key, val);
         }
+        _beastResponseSPtr->keep_alive(_request->getBeastRequestSPtr()->keep_alive());
         _beastResponseSPtr->body() = data;
         _beastResponseSPtr->prepare_payload();
         co_await boost::beast::http::async_write(*_stream, *_beastResponseSPtr, boost::asio::use_awaitable);
         _stream->close();
-        _headerSent = true;
+        _headDataSent = true;
     }
 }
 
@@ -54,11 +55,9 @@ void um::Response::setHttpState(boost::beast::http::status status) {
 }
 
 const std::map<boost::beast::http::field, std::string> &um::Response::getHeaders() const {
-    return _headers;
+    return _responseHeaders;
 }
 
 void um::Response::set(boost::beast::http::field key, const std::string &value) {
-    _headers[key] = value;
+    _responseHeaders[key] = value;
 }
-
-

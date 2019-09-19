@@ -31,15 +31,15 @@ namespace um {
 
         const std::map<boost::beast::http::field, std::string> &getHeaders() const;
 
-        void set(boost::beast::http::field key, const std::string& value);
+        void set(boost::beast::http::field key, const std::string &value);
 
     private:
         TcpStreamSPtr _stream;
         RequestSPtr _request;
-        bool _headerSent;
+        bool _headDataSent;// 第一批数据是否已发送
         BeastHttpStringBodyResponseSPtr _beastResponseSPtr;
         boost::beast::http::status _httpState;
-        std::map<boost::beast::http::field, std::string> _headers;
+        std::map<boost::beast::http::field, std::string> _responseHeaders;
     };
 
     typedef std::shared_ptr<Response> ResponseSPtr;
