@@ -13,6 +13,7 @@
 #include "um_types.h"
 #include "Request.h"
 #include "Response.h"
+#include "AbstractViewEngine.h"
 
 namespace um {
     class Server {
@@ -22,21 +23,28 @@ namespace um {
     public:
         Server(int port, UMServerHandler handler);
 
+    public:
+        unsigned short inline getPort() const {
+            return _port;
+        }
+
+        const AbstractViewEngineSPtr &getViewEngine() const;
+
+        void setViewEngine(const AbstractViewEngineSPtr &viewEngine);
+
     private:
         unsigned short _port;
         boost::asio::io_context _io;
         UMServerHandler _handler;
+        AbstractViewEngineSPtr _viewEngine;
 
     private:
         boost::asio::awaitable<void> umServerListener();
 
         boost::asio::awaitable<void> asyncSessionHandler(TcpStreamSPtr stream);
-
-    public:
-        unsigned short inline getPort() const {
-            return _port;
-        }
     };
+
+    typedef std::shared_ptr<Server> ServerSPtr;
 }
 
 #endif //UNDERMOUNTAIN_SERVER_H

@@ -10,4 +10,5 @@ add_library(
         cpp/Server.cpp
         cpp/Request.cpp
         cpp/Response.cpp
+        cpp/DefaultViewEngine.cpp
 )

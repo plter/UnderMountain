@@ -4,10 +4,12 @@
 
 #include "../include/Response.h"
 #include <boost/asio/use_awaitable.hpp>
+#include "../include/Server.h"
 
 #include <utility>
 
-um::Response::Response(um::TcpStreamSPtr stream, RequestSPtr request) :
+um::Response::Response(Server *server, um::TcpStreamSPtr stream, RequestSPtr request) :
+        _server(server),
         _stream(std::move(stream)),
         _headDataSent(false),
         _request(std::move(request)),
@@ -60,4 +62,8 @@ const std::map<boost::beast::http::field, std::string> &um::Response::getHeaders
 
 void um::Response::set(boost::beast::http::field key, const std::string &value) {
     _responseHeaders[key] = value;
+}
+
+boost::asio::awaitable<void> um::Response::render(std::string viewName, std::map<std::string, std::any> data) {
+    co_await end(_server->getViewEngine()->render(std::move(viewName), std::move(data)));
 }

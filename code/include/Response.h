@@ -10,13 +10,21 @@
 #include <boost/asio/awaitable.hpp>
 #include "Request.h"
 #include <boost/beast.hpp>
+#include <map>
+#include <any>
 
 namespace um {
+
+    class Server;
+
     class Response {
     public:
-        Response(TcpStreamSPtr stream, RequestSPtr request);
+        Response(Server *server, TcpStreamSPtr stream, RequestSPtr request);
 
         boost::asio::awaitable<void> end(std::string data);
+
+        boost::asio::awaitable<void> render(std::string viewName, std::map<std::string, std::any> data);
+
 
     public:
         const TcpStreamSPtr &getStream() const;
@@ -36,6 +44,7 @@ namespace um {
     private:
         TcpStreamSPtr _stream;
         RequestSPtr _request;
+        Server *_server;
         bool _headDataSent;// 第一批数据是否已发送
         BeastHttpStringBodyResponseSPtr _beastResponseSPtr;
         boost::beast::http::status _httpState;

@@ -10,6 +10,7 @@
 #include <boost/asio.hpp>
 #include <iostream>
 #include <utility>
+#include "../include/DefaultViewEngine.h"
 
 using namespace boost;
 using namespace boost::asio::ip;
@@ -20,7 +21,10 @@ using namespace boost::beast;
 namespace um {
 
     Server::Server(int port, UMServerHandler handler) :
-            _port(port), _handler(std::move(handler)), _io() {
+            _port(port), _handler(std::move(handler)),
+            _io() {
+
+        _viewEngine = std::dynamic_pointer_cast<AbstractViewEngine>(std::make_shared<DefaultViewEngine>());
 
         boost::asio::signal_set signals(_io, SIGINT, SIGTERM);
         signals.async_wait([&](auto, auto) { _io.stop(); });
@@ -35,7 +39,7 @@ namespace um {
 
         tcp::acceptor acceptor(executor, {tcp::v4(), _port});
 
-        std::cout << "Server started at port " << _port << std::endl;
+        UM_LOG(info) << "Server started at port " << _port;
 
         while (true) {
             tcp::socket socket = co_await
@@ -57,13 +61,20 @@ namespace um {
             co_await
             request->asyncInit();
 
-            auto response = std::make_shared<Response>(stream, request);
+            auto response = std::make_shared<Response>(this, stream, request);
 
-            co_await
-            this->_handler(request, response);
+            co_await this->_handler(request, response);
         } catch (std::exception &e) {
             UM_LOG(warning) << "Exception:" << e.what();
         }
+    }
+
+    const AbstractViewEngineSPtr &Server::getViewEngine() const {
+        return _viewEngine;
+    }
+
+    void Server::setViewEngine(const AbstractViewEngineSPtr &viewEngine) {
+        _viewEngine = viewEngine;
     }
 
 }
