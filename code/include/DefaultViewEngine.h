@@ -19,7 +19,7 @@ namespace um {
 
         void setView(const std::string& name, AbstractDefaultViewSPtr viewSPtr);
 
-        const std::map<std::string, AbstractDefaultViewSPtr> &getViewMap() const;
+        [[nodiscard]] const std::map<std::string, AbstractDefaultViewSPtr> &getViewMap() const;
 
     private:
         std::map<std::string, AbstractDefaultViewSPtr> _viewMap;

@@ -27,19 +27,19 @@ namespace um {
 
 
     public:
-        const TcpStreamSPtr &getStream() const;
+        [[nodiscard]] const TcpStreamSPtr &getStream() const;
 
-        bool isHeaderSent() const;
+        [[nodiscard]] bool isHeaderSent() const;
 
-        boost::beast::http::status getHttpState() const;
+        [[nodiscard]] boost::beast::http::status getHttpState() const;
 
         void setHttpState(boost::beast::http::status status);
 
-        const std::map<boost::beast::http::field, std::string> &getHeaders() const;
+        [[nodiscard]] const std::map<boost::beast::http::field, std::string> &getHeaders() const;
 
         void set(boost::beast::http::field key, const std::string &value);
 
-        const std::any &getBeastResponse() const;
+        [[nodiscard]] const std::any &getBeastResponse() const;
 
     private:
         TcpStreamSPtr _stream;

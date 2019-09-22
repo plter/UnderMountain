@@ -16,9 +16,9 @@ namespace um {
         boost::asio::awaitable<void> asyncInit();
 
     public:
-        const TcpStreamSPtr &getStream() const;
+        [[nodiscard]] const TcpStreamSPtr &getStream() const;
 
-        const BeastHttpStringBodyRequest &getBeastRequest() const;
+        [[nodiscard]] const BeastHttpStringBodyRequest &getBeastRequest() const;
 
     private:
         TcpStreamSPtr _stream;

@@ -24,11 +24,11 @@ namespace um {
         Server(int port, UMServerHandler handler);
 
     public:
-        unsigned short inline getPort() const {
+        [[nodiscard]] unsigned short inline getPort() const {
             return _port;
         }
 
-        const AbstractViewEngineSPtr &getViewEngine() const;
+        [[nodiscard]] const AbstractViewEngineSPtr &getViewEngine() const;
 
         void setViewEngine(const AbstractViewEngineSPtr &viewEngine);
         void start();
