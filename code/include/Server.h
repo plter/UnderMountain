@@ -14,6 +14,7 @@
 #include "Request.h"
 #include "Response.h"
 #include "AbstractViewEngine.h"
+#include "FilterChain.h"
 
 namespace um {
     class Server {
@@ -21,7 +22,7 @@ namespace um {
         typedef std::function<boost::asio::awaitable<void>(RequestSPtr, ResponseSPtr)> UMServerHandler;
 
     public:
-        Server(int port, UMServerHandler handler);
+        Server(int port, UMServerHandler handler, std::string staticRoot = "public");
 
     public:
         [[nodiscard]] unsigned short inline getPort() const {
@@ -31,13 +32,20 @@ namespace um {
         [[nodiscard]] const AbstractViewEngineSPtr &getViewEngine() const;
 
         void setViewEngine(const AbstractViewEngineSPtr &viewEngine);
+
         void start();
+
+        [[nodiscard]] const FilterChainSPtr &getFilterChain() const;
+
+        const std::string &getStaticRoot() const;
 
     private:
         unsigned short _port;
         boost::asio::io_context _io;
         UMServerHandler _handler;
         AbstractViewEngineSPtr _viewEngine;
+        FilterChainSPtr _filterChain;
+        std::string _staticRoot;
 
     private:
         boost::asio::awaitable<void> umServerListener();

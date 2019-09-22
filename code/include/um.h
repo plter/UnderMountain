@@ -10,5 +10,8 @@
 #include "AbstractViewEngine.h"
 #include "AbstractDefaultView.h"
 #include "DefaultViewEngine.h"
+#include "FilterChain.h"
+#include "Filter.h"
+#include "FilterStaticFiles.h"
 
 #endif //UNDERMOUNTAIN_UM_H

@@ -41,6 +41,14 @@ namespace um {
 
         [[nodiscard]] const std::any &getBeastResponse() const;
 
+        [[nodiscard]] Server *getServer() const;
+
+        boost::asio::awaitable<void> sendFile(const std::string &filePath);
+
+    private://private methods
+        void buildMimeTypeMap();
+        std::string getMimeType(std::string file);
+
     private:
         TcpStreamSPtr _stream;
         RequestSPtr _request;
@@ -49,6 +57,7 @@ namespace um {
         std::any _beastResponse;
         boost::beast::http::status _httpState;
         std::map<boost::beast::http::field, std::string> _responseHeaders;
+        std::map<std::string, std::string> _mimeTypeMap;
     };
 
     typedef std::shared_ptr<Response> ResponseSPtr;
