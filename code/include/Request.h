@@ -18,11 +18,11 @@ namespace um {
     public:
         const TcpStreamSPtr &getStream() const;
 
-        const BeastHttpStringBodyRequestSPtr &getBeastRequestSPtr() const;
+        const BeastHttpStringBodyRequest &getBeastRequest() const;
 
     private:
         TcpStreamSPtr _stream;
-        BeastHttpStringBodyRequestSPtr _beastRequestSPtr;
+        BeastHttpStringBodyRequest _beastRequest;
     };
 
     typedef std::shared_ptr<Request> RequestSPtr;

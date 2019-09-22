@@ -31,8 +31,6 @@ namespace um {
 
         bool isHeaderSent() const;
 
-        const BeastHttpStringBodyResponseSPtr &getBeastResponseSPtr() const;
-
         boost::beast::http::status getHttpState() const;
 
         void setHttpState(boost::beast::http::status status);
@@ -41,12 +39,14 @@ namespace um {
 
         void set(boost::beast::http::field key, const std::string &value);
 
+        const std::any &getBeastResponse() const;
+
     private:
         TcpStreamSPtr _stream;
         RequestSPtr _request;
         Server *_server;
         bool _headDataSent;// 第一批数据是否已发送
-        BeastHttpStringBodyResponseSPtr _beastResponseSPtr;
+        std::any _beastResponse;
         boost::beast::http::status _httpState;
         std::map<boost::beast::http::field, std::string> _responseHeaders;
     };

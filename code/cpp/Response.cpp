@@ -16,6 +16,7 @@ um::Response::Response(Server *server, um::TcpStreamSPtr stream, RequestSPtr req
         _httpState(boost::beast::http::status::ok) {
 
     set(boost::beast::http::field::content_type, "text/html");
+    set(boost::beast::http::field::server, UM_SERVER_INFO);
 }
 
 const um::TcpStreamSPtr &um::Response::getStream() const {
@@ -28,24 +29,23 @@ bool um::Response::isHeaderSent() const {
 
 boost::asio::awaitable<void> um::Response::end(std::string data) {
     if (!_headDataSent) {
-        _beastResponseSPtr = std::make_shared<BeastHttpStringBodyResponse>(
+        auto response = BeastHttpStringBodyResponse(
                 _httpState,
-                _request->getBeastRequestSPtr()->version()
+                _request->getBeastRequest().version()
         );
+
+        _beastResponse = response;
+
         for (auto const&[key, val]:_responseHeaders) {
-            _beastResponseSPtr->set(key, val);
+            response.set(key, val);
         }
-        _beastResponseSPtr->keep_alive(_request->getBeastRequestSPtr()->keep_alive());
-        _beastResponseSPtr->body() = data;
-        _beastResponseSPtr->prepare_payload();
-        co_await boost::beast::http::async_write(*_stream, *_beastResponseSPtr, boost::asio::use_awaitable);
+        response.keep_alive(_request->getBeastRequest().keep_alive());
+        response.body() = data;
+        response.prepare_payload();
+        co_await boost::beast::http::async_write(*_stream, response, boost::asio::use_awaitable);
         _stream->close();
         _headDataSent = true;
     }
-}
-
-const um::BeastHttpStringBodyResponseSPtr &um::Response::getBeastResponseSPtr() const {
-    return _beastResponseSPtr;
 }
 
 boost::beast::http::status um::Response::getHttpState() const {
@@ -66,4 +66,8 @@ void um::Response::set(boost::beast::http::field key, const std::string &value) 
 
 boost::asio::awaitable<void> um::Response::render(std::string viewName, std::map<std::string, std::any> data) {
     co_await end(_server->getViewEngine()->render(std::move(viewName), std::move(data)));
+}
+
+const std::any &um::Response::getBeastResponse() const {
+    return _beastResponse;
 }

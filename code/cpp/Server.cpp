@@ -25,11 +25,6 @@ namespace um {
             _io() {
 
         _viewEngine = std::dynamic_pointer_cast<AbstractViewEngine>(std::make_shared<DefaultViewEngine>());
-
-        boost::asio::signal_set signals(_io, SIGINT, SIGTERM);
-        signals.async_wait([&](auto, auto) { _io.stop(); });
-        co_spawn(_io, std::bind(&Server::umServerListener, this), detached);
-        _io.run();
     }
 
 
@@ -75,6 +70,14 @@ namespace um {
 
     void Server::setViewEngine(const AbstractViewEngineSPtr &viewEngine) {
         _viewEngine = viewEngine;
+    }
+
+    void Server::start() {
+
+        boost::asio::signal_set signals(_io, SIGINT, SIGTERM);
+        signals.async_wait([&](auto, auto) { _io.stop(); });
+        co_spawn(_io, std::bind(&Server::umServerListener, this), detached);
+        _io.run();
     }
 
 }

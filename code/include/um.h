@@ -7,5 +7,8 @@
 
 #include "um_types.h"
 #include "Server.h"
+#include "AbstractViewEngine.h"
+#include "AbstractDefaultView.h"
+#include "DefaultViewEngine.h"
 
 #endif //UNDERMOUNTAIN_UM_H

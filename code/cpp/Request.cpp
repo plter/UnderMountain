@@ -18,14 +18,14 @@ um::Request::Request(um::TcpStreamSPtr stream) :
 
 boost::asio::awaitable<void> um::Request::asyncInit() {
     beast::flat_buffer buffer;
-    _beastRequestSPtr = std::make_shared<BeastHttpStringBodyRequest>();
-    co_await http::async_read(*_stream, buffer, *_beastRequestSPtr, boost::asio::use_awaitable);
+    _beastRequest = BeastHttpStringBodyRequest();
+    co_await http::async_read(*_stream, buffer, _beastRequest, boost::asio::use_awaitable);
 }
 
 const um::TcpStreamSPtr &um::Request::getStream() const {
     return _stream;
 }
 
-const um::BeastHttpStringBodyRequestSPtr &um::Request::getBeastRequestSPtr() const {
-    return _beastRequestSPtr;
+const um::BeastHttpStringBodyRequest &um::Request::getBeastRequest() const {
+    return _beastRequest;
 }

@@ -15,3 +15,4 @@ link_directories(
 add_subdirectory(code)
 add_subdirectory(examples/BeastHttpServer)
 add_subdirectory(examples/HelloWorld)
+add_subdirectory(examples/UsingDefaultViewEngine)

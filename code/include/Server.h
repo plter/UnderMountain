@@ -31,6 +31,7 @@ namespace um {
         const AbstractViewEngineSPtr &getViewEngine() const;
 
         void setViewEngine(const AbstractViewEngineSPtr &viewEngine);
+        void start();
 
     private:
         unsigned short _port;
