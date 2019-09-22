@@ -22,7 +22,7 @@ namespace um {
         typedef std::function<boost::asio::awaitable<void>(RequestSPtr, ResponseSPtr)> UMServerHandler;
 
     public:
-        Server(int port, UMServerHandler handler, std::string staticRoot = "public");
+        Server(int port, UMServerHandler handler = nullptr, std::string staticRoot = "public");
 
     public:
         [[nodiscard]] unsigned short inline getPort() const {

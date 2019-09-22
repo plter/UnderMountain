@@ -61,16 +61,16 @@ namespace um {
             co_await
             request->asyncInit();
 
-            UM_LOG(info) << request->getMethod() << " " << request->getTarget();
-
             auto response = std::make_shared<Response>(this, stream, request);
 
             co_await
             _filterChain->run(request, response);
 
             if (!response->isHeaderSent()) {
-                co_await
-                this->_handler(request, response);
+                if (_handler) {
+                    co_await
+                    this->_handler(request, response);
+                }
             }
 
             //After all task done, if the header still not send, we response a 404 page.
@@ -79,6 +79,10 @@ namespace um {
                 co_await
                 response->end("Resource not found.");
             }
+
+            UM_LOG(info) << request->getMethod()
+                         << " [" << (unsigned) (response->getHttpState()) << "] "
+                         << request->getTarget();
         } catch (std::exception &e) {
             UM_LOG(warning) << "Exception:" << e.what();
         }
