@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 project(UnderMountain)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "-DBOOST_ASIO_HAS_CO_AWAIT -DBOOST_ALL_DYN_LINK -fcoroutines-ts -stdlib=libc++")
+set(CMAKE_CXX_FLAGS "-D_GNU_SOURCE -DBOOST_ASIO_HAS_CO_AWAIT -DBOOST_ALL_DYN_LINK -fcoroutines-ts -stdlib=libc++")
 
 include_directories(
         /usr/local/include
