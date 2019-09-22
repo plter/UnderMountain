@@ -3,11 +3,13 @@
 //
 
 #include "RootView.h"
+#include <boost/format.hpp>
+#include <sstream>
 
 RootView::RootView() {}
 
 std::string RootView::render(std::map<std::string, std::any> data) {
-    return R"(
+    return (std::stringstream() << R"(
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,9 +17,10 @@ std::string RootView::render(std::map<std::string, std::any> data) {
         <title>Hello World</title>
     </head>
     <body>
-        Default view engine is ok.
+        Hello )" << std::any_cast<std::string>(data["name"]) << R"(
     </body>
-</html>)";
+</html>
+)").str();
 }
 
 
