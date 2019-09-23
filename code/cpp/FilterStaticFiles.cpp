@@ -8,11 +8,12 @@
 #include "../include/Server.h"
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
+#include <utility>
 
 boost::asio::awaitable<void> um::FilterStaticFiles::run(um::RequestSPtr req, um::ResponseSPtr res) {
 
     std::string file;
-    file += res->getServer()->getStaticRoot();
+    file += _staticRoot;
     file += req->getRequestPath();
     if (file.back() == '/') {
         file += "index.html";
@@ -23,3 +24,5 @@ boost::asio::awaitable<void> um::FilterStaticFiles::run(um::RequestSPtr req, um:
         res->sendFile(file);
     }
 }
+
+um::FilterStaticFiles::FilterStaticFiles(std::string staticRoot) : _staticRoot(std::move(staticRoot)) {}

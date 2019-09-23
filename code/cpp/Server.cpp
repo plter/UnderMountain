@@ -21,12 +21,11 @@ using namespace boost::beast;
 
 namespace um {
 
-    Server::Server(int port, UMServerHandler handler, std::string staticRoot) :
+    Server::Server(int port, UMServerHandler handler) :
             _port(port),
             _handler(std::move(handler)),
             _io(),
-            _filterChain(std::make_shared<um::FilterChain>()),
-            _staticRoot(staticRoot) {
+            _filterChain(std::make_shared<um::FilterChain>()) {
 
         _viewEngine = std::dynamic_pointer_cast<AbstractViewEngine>(std::make_shared<DefaultViewEngine>());
         _filterChain->addFilter(std::make_shared<FilterBadRequest>());
@@ -106,9 +105,5 @@ namespace um {
 
     const FilterChainSPtr &Server::getFilterChain() const {
         return _filterChain;
-    }
-
-    const std::string &Server::getStaticRoot() const {
-        return _staticRoot;
     }
 }

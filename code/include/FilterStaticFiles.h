@@ -11,7 +11,12 @@
 namespace um {
     class FilterStaticFiles : public Filter {
     public:
+        FilterStaticFiles(std::string staticRoot = "public");
+
         boost::asio::awaitable<void> run(RequestSPtr req, ResponseSPtr res) override;
+
+    private:
+        std::string _staticRoot;
     };
 
     typedef std::shared_ptr<FilterStaticFiles> FilterStaticFilesSPtr;

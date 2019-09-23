@@ -9,7 +9,7 @@
 
 int main() {
     um::Server server(9000);
-    server.getFilterChain()->addFilter(std::make_shared<um::FilterStaticFiles>());
+    server.getFilterChain()->addFilter(std::make_shared<um::FilterStaticFiles>("static"));
     server.start();
     return 0;
 }

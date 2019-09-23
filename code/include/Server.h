@@ -22,7 +22,7 @@ namespace um {
         typedef std::function<boost::asio::awaitable<void>(RequestSPtr, ResponseSPtr)> UMServerHandler;
 
     public:
-        Server(int port, UMServerHandler handler = nullptr, std::string staticRoot = "public");
+        Server(int port, UMServerHandler handler = nullptr);
 
     public:
         [[nodiscard]] unsigned short inline getPort() const {
@@ -37,15 +37,12 @@ namespace um {
 
         [[nodiscard]] const FilterChainSPtr &getFilterChain() const;
 
-        const std::string &getStaticRoot() const;
-
     private:
         unsigned short _port;
         boost::asio::io_context _io;
         UMServerHandler _handler;
         AbstractViewEngineSPtr _viewEngine;
         FilterChainSPtr _filterChain;
-        std::string _staticRoot;
 
     private:
         boost::asio::awaitable<void> umServerListener();
