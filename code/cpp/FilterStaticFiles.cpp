@@ -10,6 +10,9 @@
 #include <boost/algorithm/string.hpp>
 #include <utility>
 
+
+um::FilterStaticFiles::FilterStaticFiles(std::string staticRoot) : _staticRoot(std::move(staticRoot)) {}
+
 boost::asio::awaitable<void> um::FilterStaticFiles::run(um::RequestSPtr req, um::ResponseSPtr res) {
 
     std::string file;
@@ -24,5 +27,3 @@ boost::asio::awaitable<void> um::FilterStaticFiles::run(um::RequestSPtr req, um:
         res->sendFile(file);
     }
 }
-
-um::FilterStaticFiles::FilterStaticFiles(std::string staticRoot) : _staticRoot(std::move(staticRoot)) {}
