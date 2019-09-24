@@ -8,6 +8,7 @@
 #include "AbstractViewEngine.h"
 #include "AbstractDefaultView.h"
 #include <memory>
+#include "ViewData.h"
 
 namespace um {
     class DefaultViewEngine : public AbstractViewEngine {
@@ -15,9 +16,9 @@ namespace um {
     public:
         DefaultViewEngine();
 
-        std::string render(std::string name, std::map<std::string, std::any> data) override;
+        std::string render(std::string name, ViewData data) override;
 
-        void setView(const std::string& name, AbstractDefaultViewSPtr viewSPtr);
+        void setView(const std::string &name, AbstractDefaultViewSPtr viewSPtr);
 
         [[nodiscard]] const std::map<std::string, AbstractDefaultViewSPtr> &getViewMap() const;
 

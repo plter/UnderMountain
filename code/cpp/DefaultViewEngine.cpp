@@ -9,7 +9,7 @@
 
 um::DefaultViewEngine::DefaultViewEngine() {}
 
-std::string um::DefaultViewEngine::render(std::string name, std::map<std::string, std::any> data) {
+std::string um::DefaultViewEngine::render(std::string name, um::ViewData data) {
     auto view = _viewMap[name];
     if (view) {
         return view->render(data);

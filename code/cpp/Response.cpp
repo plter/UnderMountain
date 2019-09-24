@@ -67,7 +67,7 @@ void um::Response::set(boost::beast::http::field key, const std::string &value) 
     _responseHeaders[key] = value;
 }
 
-boost::asio::awaitable<void> um::Response::render(std::string viewName, std::map<std::string, std::any> data) {
+boost::asio::awaitable<void> um::Response::render(std::string viewName, um::ViewData data) {
     co_await end(_server->getViewEngine()->render(std::move(viewName), std::move(data)));
 }
 

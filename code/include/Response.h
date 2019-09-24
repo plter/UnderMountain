@@ -12,6 +12,7 @@
 #include <boost/beast.hpp>
 #include <map>
 #include <any>
+#include "ViewData.h"
 
 namespace um {
 
@@ -23,10 +24,8 @@ namespace um {
 
         boost::asio::awaitable<void> end(std::string data);
 
-        boost::asio::awaitable<void> render(std::string viewName, std::map<std::string, std::any> data);
+        boost::asio::awaitable<void> render(std::string viewName, um::ViewData data);
 
-
-    public:
         [[nodiscard]] const TcpStreamSPtr &getStream() const;
 
         [[nodiscard]] bool isHeaderSent() const;
@@ -47,6 +46,7 @@ namespace um {
 
     private://private methods
         void buildMimeTypeMap();
+
         std::string getMimeType(std::string file);
 
     private:

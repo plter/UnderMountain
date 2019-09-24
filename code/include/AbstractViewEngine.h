@@ -9,13 +9,14 @@
 #include <map>
 #include <any>
 #include <memory>
+#include "ViewData.h"
 
 namespace um {
     class AbstractViewEngine {
     public:
         AbstractViewEngine() {}
 
-        virtual std::string render(std::string name, std::map<std::string, std::any> data) = 0;
+        virtual std::string render(std::string name, um::ViewData data) = 0;
     };
 
     typedef std::shared_ptr<AbstractViewEngine> AbstractViewEngineSPtr;

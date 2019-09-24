@@ -19,4 +19,5 @@ add_library(
         cpp/URLParameters.cpp
         cpp/URLParameterValue.cpp
         cpp/Dumper.cpp
+        cpp/ViewData.cpp
 )

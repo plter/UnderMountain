@@ -9,11 +9,12 @@
 #include <map>
 #include <any>
 #include <memory>
+#include "ViewData.h"
 
 namespace um {
     class AbstractDefaultView {
     public:
-        virtual std::string render(std::map<std::string, std::any> data) = 0;
+        virtual std::string render(ViewData data) = 0;
     };
 
     typedef std::shared_ptr<AbstractDefaultView> AbstractDefaultViewSPtr;

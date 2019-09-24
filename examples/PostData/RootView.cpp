@@ -3,12 +3,11 @@
 //
 
 #include "RootView.h"
-#include <boost/format.hpp>
 #include <sstream>
 
 RootView::RootView() {}
 
-std::string RootView::render(std::map<std::string, std::any> data) {
+std::string RootView::render(um::ViewData data) {
     return (std::stringstream() << R"(
 <!DOCTYPE html>
 <html>
@@ -18,10 +17,10 @@ std::string RootView::render(std::map<std::string, std::any> data) {
     </head>
     <body>
         <div>
-            Name: )" << std::any_cast<std::string>(data["name"]) << R"(
+            Name: )" << data.getString("name") << R"(
         </div>
         <div>
-            age: )" << std::any_cast<std::string>(data["age"]) << R"(
+            age: )" << data.getString("age") << R"(
         </div>
     </body>
 </html>

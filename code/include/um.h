@@ -15,5 +15,6 @@
 #include "Server.h"
 #include "URLParameters.h"
 #include "Dumper.h"
+#include "ViewData.h"
 
 #endif //UNDERMOUNTAIN_UM_H
