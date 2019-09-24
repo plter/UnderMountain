@@ -8,6 +8,7 @@
 #include "um_types.h"
 #include <boost/asio/awaitable.hpp>
 #include <string>
+#include "URLParameters.h"
 
 namespace um {
     class Request {
@@ -23,19 +24,29 @@ namespace um {
 
         [[nodiscard]] const std::string &getTarget() const;
 
-        [[nodiscard]] const std::string &getMethod() const;
+        [[nodiscard]] boost::beast::http::verb getMethod() const;
 
-        const std::string &getRequestPath() const;
+        [[nodiscard]] const std::string &getRequestPath() const;
 
-        const std::string &getQuery() const;
+        [[nodiscard]] const std::string &getQuery() const;
+
+        [[nodiscard]] const std::string &getBody() const;
+
+        const URLParameterPairs &getPostVars() const;
+
+        const URLParameterPairs &getGetVars() const;
 
     private:
         TcpStreamSPtr _stream;
         BeastHttpStringBodyRequest _beastRequest;
         std::string _target;
-        std::string _method;
         std::string _requestPath;
         std::string _query;
+        boost::beast::http::verb _method;
+        std::string _body;
+        std::string _contentType;
+        URLParameterPairs _postVars;
+        URLParameterPairs _getVars;
     };
 
     typedef std::shared_ptr<Request> RequestSPtr;

@@ -13,5 +13,7 @@
 #include "Filter.h"
 #include "FilterStaticFiles.h"
 #include "Server.h"
+#include "URLParameters.h"
+#include "Dumper.h"
 
 #endif //UNDERMOUNTAIN_UM_H

@@ -16,4 +16,7 @@ add_library(
         cpp/Filter.cpp
         cpp/FilterStaticFiles.cpp
         cpp/FilterBadRequest.cpp
+        cpp/URLParameters.cpp
+        cpp/URLParameterValue.cpp
+        cpp/Dumper.cpp
 )
