@@ -11,7 +11,7 @@ class RootView : public um::AbstractDefaultView {
 public:
     RootView();
 
-    std::string render(std::map<std::string, std::any> data) override;
+    std::string render(um::ViewData data) override;
 };
 
 

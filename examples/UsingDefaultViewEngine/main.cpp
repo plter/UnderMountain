@@ -10,8 +10,11 @@
 
 int main() {
     um::Server server(9000, [](auto req, um::ResponseSPtr res) -> boost::asio::awaitable<void> {
-        std::map<std::string, std::any> data;
-        data["name"] = std::string("UM");
+        um::ViewData data(
+                {
+                        {"name", 1},
+                }
+        );
 
         co_await
         res->render("root", data);

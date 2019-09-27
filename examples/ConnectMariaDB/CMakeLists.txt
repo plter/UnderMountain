@@ -9,5 +9,4 @@ link_libraries(
         um_server
 )
 
-
-add_executable(StaticWebRoot main.cpp)
+add_executable(ConnectMariaDB main.cpp)

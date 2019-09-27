@@ -8,7 +8,8 @@
 
 RootView::RootView() {}
 
-std::string RootView::render(std::map<std::string, std::any> data) {
+std::string RootView::render(um::ViewData data) {
+
     return (std::stringstream() << R"(
 <!DOCTYPE html>
 <html>
@@ -17,7 +18,7 @@ std::string RootView::render(std::map<std::string, std::any> data) {
         <title>Hello World</title>
     </head>
     <body>
-        Hello )" << std::any_cast<std::string>(data["name"]) << R"(
+        Hello )" << data.getString("name") << R"(
     </body>
 </html>
 )").str();

@@ -7,7 +7,7 @@ link_libraries(
 )
 
 add_library(
-        UMServer SHARED
+        um_server SHARED
         cpp/Server.cpp
         cpp/Request.cpp
         cpp/Response.cpp

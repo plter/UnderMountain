@@ -6,7 +6,7 @@ link_libraries(
         pthread
         boost_coroutine
         boost_log-mt
-        UMServer
+        um_server
 )
 
 
