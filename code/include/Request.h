@@ -9,11 +9,15 @@
 #include <boost/asio/awaitable.hpp>
 #include <string>
 #include "URLParameters.h"
+#include <map>
 
 namespace um {
+
+    class Server;
+
     class Request {
     public:
-        Request(TcpStreamSPtr stream);
+        Request(um::Server *server, TcpStreamSPtr stream);
 
         boost::asio::awaitable<void> asyncInit();
 
@@ -32,9 +36,33 @@ namespace um {
 
         [[nodiscard]] const std::string &getBody() const;
 
-        const URLParameterPairs &getPostVars() const;
+        [[nodiscard]] const URLParameterPairs &getPostVars() const;
 
-        const URLParameterPairs &getGetVars() const;
+        [[nodiscard]] const URLParameterPairs &getGetVars() const;
+
+        [[nodiscard]] const std::map<std::string, std::string> &getCookie() const;
+
+        void setCookie(const std::map<std::string, std::string> &cookie);
+
+        [[nodiscard]] Server *getServer() const;
+
+        [[nodiscard]] const std::string &getSessionId() const;
+
+        void setSessionId(const std::string &sessionId);
+
+        std::map<std::string, std::string> &getSession();
+
+        std::string getSessionValue(const std::string &key);
+
+        int getSessionValueAsInt(const std::string &key);
+
+        int getSessionValueAsInt(const std::string &key, int defaultValue);
+
+        std::string getSessionValue(const std::string &key, std::string defaultValue);
+
+        void setSessionValue(const std::string &key, std::string value);
+
+        void setSessionValue(const std::string &key, int value);
 
     private:
         TcpStreamSPtr _stream;
@@ -47,6 +75,9 @@ namespace um {
         std::string _contentType;
         URLParameterPairs _postVars;
         URLParameterPairs _getVars;
+        std::map<std::string, std::string> _cookie;
+        um::Server *_server;
+        std::string _sessionId;
     };
 
     typedef std::shared_ptr<Request> RequestSPtr;

@@ -8,13 +8,14 @@
 
 #include <utility>
 #include <iostream>
+#include "../include/Server.h"
 
 namespace beast = boost::beast;
 namespace http = beast::http;
 
-um::Request::Request(um::TcpStreamSPtr stream) :
-        _stream(std::move(stream)) {
-
+um::Request::Request(um::Server *server, um::TcpStreamSPtr stream) :
+        _stream(std::move(stream)), _method(http::verb::get) {
+    _server = server;
 }
 
 boost::asio::awaitable<void> um::Request::asyncInit() {
@@ -77,4 +78,62 @@ const um::URLParameterPairs &um::Request::getPostVars() const {
 
 const um::URLParameterPairs &um::Request::getGetVars() const {
     return _getVars;
+}
+
+const std::map<std::string, std::string> &um::Request::getCookie() const {
+    return _cookie;
+}
+
+void um::Request::setCookie(const std::map<std::string, std::string> &cookie) {
+    _cookie = cookie;
+}
+
+um::Server *um::Request::getServer() const {
+    return _server;
+}
+
+const std::string &um::Request::getSessionId() const {
+    return _sessionId;
+}
+
+void um::Request::setSessionId(const std::string &sessionId) {
+    _sessionId = sessionId;
+}
+
+std::map<std::string, std::string> &um::Request::getSession() {
+    return getServer()->getSessionStorage()->getSession(getSessionId());
+}
+
+std::string um::Request::getSessionValue(const std::string &key) {
+    return getSession()[key];
+}
+
+void um::Request::setSessionValue(const std::string &key, std::string value) {
+    getSession()[key] = std::move(value);
+}
+
+void um::Request::setSessionValue(const std::string &key, int value) {
+    setSessionValue(key, std::to_string(value));
+}
+
+std::string um::Request::getSessionValue(const std::string &key, std::string defaultValue) {
+    auto v = getSessionValue(key);
+    if (!v.empty()) {
+        return v;
+    } else {
+        return defaultValue;
+    }
+}
+
+int um::Request::getSessionValueAsInt(const std::string &key) {
+    return std::stoi(getSessionValue(key));
+}
+
+int um::Request::getSessionValueAsInt(const std::string &key, int defaultValue) {
+    auto v = getSessionValue(key);
+    if (!v.empty()) {
+        return std::stoi(v);
+    } else {
+        return defaultValue;
+    }
 }

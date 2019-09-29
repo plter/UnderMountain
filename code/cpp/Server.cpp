@@ -12,6 +12,8 @@
 #include <utility>
 #include "../include/DefaultViewEngine.h"
 #include "../include/FilterBadRequest.h"
+#include "../include/FilterSession.h"
+#include "../include/DefaultSessionStorage.h"
 
 using namespace boost;
 using namespace boost::asio::ip;
@@ -27,8 +29,10 @@ namespace um {
             _io(),
             _filterChain(std::make_shared<um::FilterChain>()) {
 
-        _viewEngine = std::dynamic_pointer_cast<AbstractViewEngine>(std::make_shared<DefaultViewEngine>());
+        setSessionStorage(std::make_shared<um::DefaultSessionStorage>());
+        setViewEngine(std::dynamic_pointer_cast<AbstractViewEngine>(std::make_shared<DefaultViewEngine>()));
         _filterChain->addFilter(std::make_shared<FilterBadRequest>());
+        _filterChain->addFilter(std::make_shared<FilterSession>());
     }
 
 
@@ -56,7 +60,7 @@ namespace um {
 
     boost::asio::awaitable<void> Server::asyncSessionHandler(TcpStreamSPtr stream) {
         try {
-            auto request = std::make_shared<Request>(stream);
+            auto request = std::make_shared<Request>(this, stream);
             co_await
             request->asyncInit();
 
@@ -105,5 +109,13 @@ namespace um {
 
     const FilterChainSPtr &Server::getFilterChain() const {
         return _filterChain;
+    }
+
+    const AbstractSessionStorageSPtr &Server::getSessionStorage() const {
+        return _sessionStorage;
+    }
+
+    void Server::setSessionStorage(const AbstractSessionStorageSPtr &sessionStorage) {
+        _sessionStorage = sessionStorage;
     }
 }

@@ -13,6 +13,8 @@ namespace um {
     class Dumper {
     public:
         static void dumpURLParameters(std::map<std::string, um::URLParameterValue> params);
+
+        static void dumpStringMap(const std::map<std::string, std::string>& map);
     };
 }
 

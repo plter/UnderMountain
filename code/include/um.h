@@ -12,10 +12,14 @@
 #include "FilterChain.h"
 #include "Filter.h"
 #include "FilterStaticFiles.h"
+#include "FilterSession.h"
 #include "Server.h"
 #include "URLParameters.h"
 #include "Dumper.h"
 #include "ViewData.h"
 #include "AbstractDbConnection.h"
+#include "Cookie.h"
+#include "AbstractSessionStorage.h"
+#include "DefaultSessionStorage.h"
 
 #endif //UNDERMOUNTAIN_UM_H

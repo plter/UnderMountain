@@ -23,4 +23,7 @@ add_library(
         cpp/DbRow.cpp
         cpp/DbGrid.cpp
         cpp/DbField.cpp
+        cpp/FilterSession.cpp
+        cpp/Cookie.cpp
+        cpp/DefaultSessionStorage.cpp
 )

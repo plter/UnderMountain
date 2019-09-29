@@ -21,22 +21,16 @@ std::string um::ViewData::getString(const std::string &key) {
         try {
             return std::any_cast<std::string>(get(key));
         } catch (std::exception &e) {
-            UM_LOG(warning) << e.what() << ", Can not convert to std::string, "
-                            << "we will try to convert it to const char*";
         }
         try {
             return std::any_cast<const char *>(get(key));
         } catch (std::exception &e) {
-            UM_LOG(warning) << e.what() << ", Can not convert to const char*, "
-                            << "we will try to convert it to char*";
         }
         try {
             return std::any_cast<char *>(get(key));
         } catch (std::exception &e) {
-            UM_LOG(warning) << e.what() << ", Can not convert to char*";
             UM_LOG(error) << "Failed to convert value by key[" << key << "] to a string";
         }
-        return "";
     }
     return "";
 }

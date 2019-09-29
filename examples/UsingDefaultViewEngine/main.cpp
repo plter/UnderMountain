@@ -12,7 +12,7 @@ int main() {
     um::Server server(9000, [](auto req, um::ResponseSPtr res) -> boost::asio::awaitable<void> {
         um::ViewData data(
                 {
-                        {"name", 1},
+                        {"name", "YUNP"},
                 }
         );
 

@@ -15,6 +15,7 @@
 #include "Response.h"
 #include "AbstractViewEngine.h"
 #include "FilterChain.h"
+#include "AbstractSessionStorage.h"
 
 namespace um {
     class Server {
@@ -37,12 +38,17 @@ namespace um {
 
         [[nodiscard]] const FilterChainSPtr &getFilterChain() const;
 
+        const AbstractSessionStorageSPtr &getSessionStorage() const;
+
+        void setSessionStorage(const AbstractSessionStorageSPtr &sessionStorage);
+
     private:
         unsigned short _port;
         boost::asio::io_context _io;
         UMServerHandler _handler;
         AbstractViewEngineSPtr _viewEngine;
         FilterChainSPtr _filterChain;
+        um::AbstractSessionStorageSPtr _sessionStorage;
 
     private:
         boost::asio::awaitable<void> umServerListener();
