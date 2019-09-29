@@ -16,5 +16,6 @@ int main() {
     auto count = conn->executeSQL("SELECT * FROM user WHERE id > 0", result);
     std::cout << result->toString() << std::endl;
     std::cout << "Affected rows: " << count << std::endl;
+    conn->close();
     return 0;
 }
