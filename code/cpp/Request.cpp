@@ -105,11 +105,11 @@ std::map<std::string, std::string> &um::Request::getSession() {
 }
 
 std::string um::Request::getSessionValue(const std::string &key) {
-    return getSession()[key];
+    return getSessionStorage()->getSessionValue(getSessionId(), key);
 }
 
 void um::Request::setSessionValue(const std::string &key, std::string value) {
-    getSession()[key] = std::move(value);
+    getSessionStorage()->setSessionValue(getSessionId(), key, std::move(value));
 }
 
 void um::Request::setSessionValue(const std::string &key, int value) {
@@ -136,4 +136,8 @@ int um::Request::getSessionValueAsInt(const std::string &key, int defaultValue) 
     } else {
         return defaultValue;
     }
+}
+
+um::AbstractSessionStorageSPtr um::Request::getSessionStorage() const {
+    return getServer()->getSessionStorage();
 }

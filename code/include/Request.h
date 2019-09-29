@@ -10,6 +10,7 @@
 #include <string>
 #include "URLParameters.h"
 #include <map>
+#include "AbstractSessionStorage.h"
 
 namespace um {
 
@@ -63,6 +64,8 @@ namespace um {
         void setSessionValue(const std::string &key, std::string value);
 
         void setSessionValue(const std::string &key, int value);
+
+        AbstractSessionStorageSPtr getSessionStorage() const;
 
     private:
         TcpStreamSPtr _stream;

@@ -111,7 +111,7 @@ namespace um {
         return _filterChain;
     }
 
-    const AbstractSessionStorageSPtr &Server::getSessionStorage() const {
+    const AbstractSessionStorageSPtr Server::getSessionStorage() const {
         return _sessionStorage;
     }
 

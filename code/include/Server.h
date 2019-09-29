@@ -38,7 +38,7 @@ namespace um {
 
         [[nodiscard]] const FilterChainSPtr &getFilterChain() const;
 
-        const AbstractSessionStorageSPtr &getSessionStorage() const;
+        const AbstractSessionStorageSPtr getSessionStorage() const;
 
         void setSessionStorage(const AbstractSessionStorageSPtr &sessionStorage);
 
