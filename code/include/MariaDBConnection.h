@@ -57,8 +57,52 @@ namespace um {
             std::vector<um::DbField> dbFields;
             MYSQL_FIELD *field;
             while ((field = mysql_fetch_field(mysqlResult))) {
-                //TODO translate data type
-                dbFields.emplace_back(field->name, DbField::Type::STRING, field->table, field->db);
+                DbField::Type type;
+                switch (field->type) {
+                    case MYSQL_TYPE_VAR_STRING:
+                    case MYSQL_TYPE_BLOB:
+                    case MYSQL_TYPE_VARCHAR:
+                        type = DbField::Type::STRING;
+                        break;
+                    case MYSQL_TYPE_TINY:
+                    case MYSQL_TYPE_SHORT:
+                    case MYSQL_TYPE_LONG:
+                    case MYSQL_TYPE_LONGLONG:
+                    case MYSQL_TYPE_INT24:
+                    case MYSQL_TYPE_BIT:
+                        type = DbField::Type::INTEGER;
+                        break;
+                    case MYSQL_TYPE_DECIMAL:
+                    case MYSQL_TYPE_FLOAT:
+                    case MYSQL_TYPE_DOUBLE:
+                        type = DbField::Type::NUMBER;
+                        break;
+                    case MYSQL_TYPE_NULL:
+                        type = DbField::Type::TYPE_NULL;
+                        break;
+                    case MYSQL_TYPE_TIMESTAMP:
+                        type = DbField::Type::TIMESTAMP;
+                        break;
+                    case MYSQL_TYPE_DATE:
+                        type = DbField::Type::DATE;
+                        break;
+                    case MYSQL_TYPE_TIME:
+                        type = DbField::Type::TIME;
+                        break;
+                    case MYSQL_TYPE_DATETIME:
+                        type = DbField::Type::DATETIME;
+                        break;
+                    case MYSQL_TYPE_YEAR:
+                        type = DbField::Type::YEAR;
+                        break;
+                    case MYSQL_TYPE_NEWDATE:
+                        type = DbField::Type::NEWDATE;
+                        break;
+                    default:
+                        type = DbField::Type::STRING;
+                        break;
+                }
+                dbFields.emplace_back(field->name, type, field->table, field->db);
             }
 
             //fetch rows

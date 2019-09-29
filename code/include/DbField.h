@@ -13,11 +13,10 @@ namespace um {
     public:
         enum Type {
             STRING,
-            INT,
-            BIGINT,
-            TINYINT,
-            TEXT,
-            LONGTEXT
+            DATE, TIME, YEAR, NEWDATE, TIMESTAMP, DATETIME,
+            NUMBER,
+            TYPE_NULL,
+            INTEGER
         };
 
     public:
