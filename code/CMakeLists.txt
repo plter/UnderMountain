@@ -20,4 +20,7 @@ add_library(
         cpp/URLParameterValue.cpp
         cpp/Dumper.cpp
         cpp/ViewData.cpp
+        cpp/DbRow.cpp
+        cpp/DbGrid.cpp
+        cpp/DbField.cpp
 )

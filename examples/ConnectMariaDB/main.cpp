@@ -4,11 +4,17 @@
 
 #include <um.h>
 #include <boost/asio/use_awaitable.hpp>
+#include <MariaDBConnection.h>
+#include <memory>
 
 int main() {
-    um::Server server(9000, [](auto req, auto res) -> boost::asio::awaitable<void> {
-        co_await res->end("Hello World");
-    });
-    server.start();
+
+    auto conn = std::make_shared<um::MariaDBConnection>();
+    conn->connect("127.0.0.1", "mydb", "root", "example", "utf8", 3306);
+
+    um::DbGridSPtr result;
+    auto count = conn->executeSQL("SELECT * FROM user WHERE id > 0", result);
+    std::cout << result->toString() << std::endl;
+    std::cout << "Affected rows: " << count << std::endl;
     return 0;
 }

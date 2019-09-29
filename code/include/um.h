@@ -16,5 +16,6 @@
 #include "URLParameters.h"
 #include "Dumper.h"
 #include "ViewData.h"
+#include "AbstractDbConnection.h"
 
 #endif //UNDERMOUNTAIN_UM_H
