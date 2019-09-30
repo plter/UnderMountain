@@ -11,9 +11,8 @@ int main() {
 
     auto conn = std::make_shared<um::MariaDBConnection>();
     conn->connect("127.0.0.1", "mydb", "root", "example", "utf8", 3306);
-    conn->autocommit(false);
 
-    um::DbGridSPtr result;
+    conn->autocommit(false);
     auto count = conn->executeSQL("INSERT INTO user (name) VALUES('Peter')");
     std::cout << "Affected rows: " << count << std::endl;
     conn->rollback();
