@@ -33,6 +33,12 @@ namespace um {
         virtual unsigned long executeSQL(std::string sql) = 0;
 
         virtual void close() = 0;
+
+        virtual void autocommit(bool mode) = 0;
+
+        virtual void commit() = 0;
+
+        virtual void rollback() = 0;
     };
 }
 
