@@ -5,11 +5,11 @@
 #ifndef UNDERMOUNTAIN_FILTERSTATICFILES_H
 #define UNDERMOUNTAIN_FILTERSTATICFILES_H
 
-#include "Filter.h"
+#include "AbstractFilter.h"
 #include <memory>
 
 namespace um {
-    class FilterStaticFiles : public Filter {
+    class FilterStaticFiles : public AbstractFilter {
     public:
         FilterStaticFiles(std::string staticRoot = "public");
 

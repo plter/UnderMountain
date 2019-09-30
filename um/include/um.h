@@ -10,7 +10,7 @@
 #include "AbstractDefaultView.h"
 #include "DefaultViewEngine.h"
 #include "FilterChain.h"
-#include "Filter.h"
+#include "AbstractFilter.h"
 #include "FilterStaticFiles.h"
 #include "FilterSession.h"
 #include "Server.h"

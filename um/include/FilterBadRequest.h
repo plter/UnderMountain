@@ -5,10 +5,10 @@
 #ifndef UNDERMOUNTAIN_FILTERBADREQUEST_H
 #define UNDERMOUNTAIN_FILTERBADREQUEST_H
 
-#include "Filter.h"
+#include "AbstractFilter.h"
 
 namespace um {
-    class FilterBadRequest : public Filter {
+    class FilterBadRequest : public AbstractFilter {
 
     public:
         boost::asio::awaitable<void> run(RequestSPtr req, ResponseSPtr res) override;

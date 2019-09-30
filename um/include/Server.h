@@ -16,6 +16,7 @@
 #include "AbstractViewEngine.h"
 #include "FilterChain.h"
 #include "AbstractSessionStorage.h"
+#include "FilterControllers.h"
 
 namespace um {
     class Server {
@@ -49,6 +50,7 @@ namespace um {
         AbstractViewEngineSPtr _viewEngine;
         FilterChainSPtr _filterChain;
         um::AbstractSessionStorageSPtr _sessionStorage;
+        um::FilterControllersSPtr _filterControllers;
 
     private:
         boost::asio::awaitable<void> umServerListener();

@@ -6,7 +6,7 @@
 #define UNDERMOUNTAIN_FILTERCHAIN_H
 
 #include <deque>
-#include "Filter.h"
+#include "AbstractFilter.h"
 #include "Request.h"
 #include "Response.h"
 #include <boost/asio/awaitable.hpp>

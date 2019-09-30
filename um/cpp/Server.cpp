@@ -14,6 +14,7 @@
 #include "../include/FilterBadRequest.h"
 #include "../include/FilterSession.h"
 #include "../include/DefaultSessionStorage.h"
+#include "../include/FilterControllers.h"
 
 using namespace boost;
 using namespace boost::asio::ip;
@@ -33,6 +34,9 @@ namespace um {
         setViewEngine(std::dynamic_pointer_cast<AbstractViewEngine>(std::make_shared<DefaultViewEngine>()));
         _filterChain->addFilter(std::make_shared<FilterBadRequest>());
         _filterChain->addFilter(std::make_shared<FilterSession>());
+
+        _filterControllers = std::make_shared<FilterControllers>();
+        _filterChain->addFilter(_filterControllers);
     }
 
 
@@ -83,9 +87,9 @@ namespace um {
                 response->end("Resource not found.");
             }
 
-            UM_LOG(info) << request->getMethod()
-                         << " [" << (unsigned) (response->getHttpState()) << "] "
-                         << request->getTarget();
+            UM_LOG(trace) << request->getMethod()
+                          << " [" << (unsigned) (response->getHttpState()) << "] "
+                          << request->getTarget();
         } catch (std::exception &e) {
             UM_LOG(warning) << "Exception:" << e.what();
         }

@@ -13,7 +13,6 @@ add_library(
         cpp/Response.cpp
         cpp/DefaultViewEngine.cpp
         cpp/FilterChain.cpp
-        cpp/Filter.cpp
         cpp/FilterStaticFiles.cpp
         cpp/FilterBadRequest.cpp
         cpp/URLParameters.cpp
@@ -26,4 +25,5 @@ add_library(
         cpp/FilterSession.cpp
         cpp/Cookie.cpp
         cpp/DefaultSessionStorage.cpp
+        cpp/FilterControllers.cpp
 )

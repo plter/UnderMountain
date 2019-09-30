@@ -38,5 +38,5 @@ boost::asio::awaitable<void> um::FilterSession::run(um::RequestSPtr req, um::Res
     }
 
     req->setSessionId(sessionId);
-    return Filter::run(req, res);
+    co_return;
 }
