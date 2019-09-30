@@ -12,7 +12,7 @@ link_directories(
         /usr/local/lib
 )
 
-add_subdirectory(code)
+add_subdirectory(um)
 add_subdirectory(examples/BeastHttpServer)
 add_subdirectory(examples/HelloWorld)
 add_subdirectory(examples/UsingDefaultViewEngine)

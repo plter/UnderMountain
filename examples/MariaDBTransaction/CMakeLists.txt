@@ -1,5 +1,5 @@
 include_directories(
-        ../../code/include
+        ../../um/include
         /usr/local/include/mariadb
 )
 
