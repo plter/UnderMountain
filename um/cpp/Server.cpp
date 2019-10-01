@@ -15,6 +15,7 @@
 #include "../include/FilterSession.h"
 #include "../include/DefaultSessionStorage.h"
 #include "../include/FilterControllers.h"
+#include "../include/Logger.h"
 
 using namespace boost;
 using namespace boost::asio::ip;

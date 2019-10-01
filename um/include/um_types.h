@@ -8,9 +8,9 @@
 #include <boost/beast.hpp>
 #include <boost/asio/awaitable.hpp>
 #include <functional>
-#include <boost/log/trivial.hpp>
+#include <boost/filesystem.hpp>
+#include <string>
 
-#define UM_LOG(level) BOOST_LOG_TRIVIAL(level) << __FILE__ << "(" << __LINE__ << ") "
 #define UM_SERVER_VERSION "2019.10"
 #define UM_SERVER_INFO BOOST_BEAST_VERSION_STRING ", UnderMountain/" UM_SERVER_VERSION
 

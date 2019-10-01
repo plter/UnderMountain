@@ -4,6 +4,7 @@
 
 #include "../include/ViewData.h"
 #include "../include/um_types.h"
+#include "../include/Logger.h"
 
 #include <utility>
 

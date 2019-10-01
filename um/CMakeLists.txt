@@ -28,4 +28,5 @@ add_library(
         cpp/DefaultSessionStorage.cpp
         cpp/FilterControllers.cpp
         cpp/Controller.cpp
+        cpp/Logger.cpp
 )

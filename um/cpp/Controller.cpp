@@ -8,6 +8,7 @@
 #include <boost/regex.hpp>
 #include <boost/algorithm/string.hpp>
 #include <utility>
+#include "../include/Logger.h"
 
 const std::string &um::Controller::getName() const {
     return _name;
@@ -17,6 +18,7 @@ um::Controller::Controller(std::string name) : _name(std::move(name)) {}
 
 void um::Controller::addAction(const std::string &name, um::ControllerAction action) {
     _actions[name] = std::move(action);
+    UM_LOG(info) << "Add action: /" << getName() << "/" << name;
 }
 
 boost::asio::awaitable<void> um::Controller::doAction(const um::RequestSPtr &req, um::ResponseSPtr res) {
