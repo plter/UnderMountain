@@ -8,9 +8,10 @@
 #include "um_types.h"
 #include <boost/asio/awaitable.hpp>
 #include <string>
-#include "URLParameters.h"
+#include "URLParameterDecoder.h"
 #include <map>
 #include "AbstractSessionStorage.h"
+#include "FormDataDecoder.h"
 
 namespace um {
 
@@ -40,6 +41,8 @@ namespace um {
         [[nodiscard]] const URLParameterPairs &getPostVars() const;
 
         [[nodiscard]] const URLParameterPairs &getGetVars() const;
+
+        const FormData &getFormData() const;
 
         [[nodiscard]] const std::map<std::string, std::string> &getCookie() const;
 
@@ -75,11 +78,11 @@ namespace um {
 
         void setActionName(const std::string &actionName);
 
-        void addArg(std::string arg);
+        void addArg(const std::string& arg);
 
         std::string arg(int index);
 
-        const std::vector<std::string> &getArgs() const;
+        [[nodiscard]] const std::vector<std::string> &getArgs() const;
 
     private:
         TcpStreamSPtr _stream;
@@ -98,6 +101,7 @@ namespace um {
         std::string _controllerName;
         std::string _actionName;
         std::vector<std::string> _args;
+        FormData _formData;
     };
 
     typedef std::shared_ptr<Request> RequestSPtr;

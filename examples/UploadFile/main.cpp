@@ -4,6 +4,7 @@
 
 #include <um.h>
 #include <boost/asio/use_awaitable.hpp>
+#include <sstream>
 
 
 class ResultController : public um::Controller {
@@ -11,7 +12,9 @@ public:
     explicit ResultController(const std::string &name = "result") : Controller(name) {
         addAction("index", [](um::RequestSPtr req, um::ResponseSPtr res) -> boost::asio::awaitable<void> {
 
-            co_return;
+            auto data = req->getFormData();
+            co_await
+            res->end((std::stringstream() << "Name:" << *data["name"] << ",Age:" << *data["age"]).str());
         });
     }
 };

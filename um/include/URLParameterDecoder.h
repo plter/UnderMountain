@@ -2,8 +2,8 @@
 // Created by plter on 2019/9/23.
 //
 
-#ifndef UNDERMOUNTAIN_URLPARAMETERS_H
-#define UNDERMOUNTAIN_URLPARAMETERS_H
+#ifndef UNDERMOUNTAIN_URLPARAMETERDECODER_H
+#define UNDERMOUNTAIN_URLPARAMETERDECODER_H
 
 #include <map>
 #include <string>
@@ -13,7 +13,7 @@ namespace um {
 
     typedef std::map<std::string, um::URLParameterValue> URLParameterPairs;
 
-    class URLParameters {
+    class URLParameterDecoder {
 
     public:
         static URLParameterPairs decode(std::string parametersString);
@@ -21,4 +21,4 @@ namespace um {
 }
 
 
-#endif //UNDERMOUNTAIN_URLPARAMETERS_H
+#endif //UNDERMOUNTAIN_URLPARAMETERDECODER_H

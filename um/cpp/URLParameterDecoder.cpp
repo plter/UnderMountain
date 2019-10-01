@@ -2,11 +2,11 @@
 // Created by plter on 2019/9/23.
 //
 
-#include "../include/URLParameters.h"
+#include "../include/URLParameterDecoder.h"
 #include <boost/algorithm/string.hpp>
 #include <vector>
 
-std::map<std::string, um::URLParameterValue> um::URLParameters::decode(std::string parametersString) {
+std::map<std::string, um::URLParameterValue> um::URLParameterDecoder::decode(std::string parametersString) {
     std::vector<std::string> tokens;
     boost::split(tokens, parametersString, boost::is_any_of("&"));
     std::map<std::string, um::URLParameterValue> result;

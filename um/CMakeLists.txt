@@ -16,7 +16,7 @@ add_library(
         cpp/FilterChain.cpp
         cpp/FilterStaticFiles.cpp
         cpp/FilterBadRequest.cpp
-        cpp/URLParameters.cpp
+        cpp/URLParameterDecoder.cpp
         cpp/URLParameterValue.cpp
         cpp/Dumper.cpp
         cpp/ViewData.cpp
@@ -29,4 +29,7 @@ add_library(
         cpp/FilterControllers.cpp
         cpp/Controller.cpp
         cpp/Logger.cpp
+        cpp/FormDataDecoder.cpp
+        cpp/FormDataValueItem.cpp
+        cpp/FormDataValue.cpp
 )

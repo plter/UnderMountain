@@ -9,6 +9,9 @@
 #include <utility>
 #include <iostream>
 #include "../include/Server.h"
+#include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
+#include <vector>
 
 namespace beast = boost::beast;
 namespace http = beast::http;
@@ -36,10 +39,18 @@ boost::asio::awaitable<void> um::Request::asyncInit() {
     _body = _beastRequest.body();
     _contentType = _beastRequest[boost::beast::http::field::content_type].to_string();
 
-    if (_contentType == "application/x-www-form-urlencoded") {
-        _getVars = um::URLParameters::decode(_query);
-        if (_method == boost::beast::http::verb::post) {
-            _postVars = um::URLParameters::decode(_body);
+    //Parse the body
+    _getVars = um::URLParameterDecoder::decode(_query);
+    if (_method == boost::beast::http::verb::post) {
+        if (_contentType == "application/x-www-form-urlencoded") {
+            _postVars = um::URLParameterDecoder::decode(_body);
+        } else {
+            const static boost::regex r("^multipart/form-data; boundary=(.*)$");
+            boost::smatch matcher;
+            if (boost::regex_match(_contentType, matcher, r)) {
+                auto boundary = matcher[1];
+                _formData = FormDataDecoder::decode(_body, boundary);
+            }
         }
     }
 }
@@ -158,7 +169,7 @@ void um::Request::setActionName(const std::string &actionName) {
     _actionName = actionName;
 }
 
-void um::Request::addArg(std::string arg) {
+void um::Request::addArg(const std::string &arg) {
     _args.emplace_back(arg);
 }
 
@@ -168,4 +179,8 @@ std::string um::Request::arg(int index) {
 
 const std::vector<std::string> &um::Request::getArgs() const {
     return _args;
+}
+
+const um::FormData &um::Request::getFormData() const {
+    return _formData;
 }

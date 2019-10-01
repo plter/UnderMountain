@@ -14,7 +14,7 @@
 #include "FilterStaticFiles.h"
 #include "FilterSession.h"
 #include "Server.h"
-#include "URLParameters.h"
+#include "URLParameterDecoder.h"
 #include "Dumper.h"
 #include "ViewData.h"
 #include "AbstractDbConnection.h"
