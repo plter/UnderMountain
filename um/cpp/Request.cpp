@@ -157,3 +157,15 @@ const std::string &um::Request::getActionName() const {
 void um::Request::setActionName(const std::string &actionName) {
     _actionName = actionName;
 }
+
+void um::Request::addArg(std::string arg) {
+    _args.emplace_back(arg);
+}
+
+std::string um::Request::arg(int index) {
+    return _args[index];
+}
+
+const std::vector<std::string> &um::Request::getArgs() const {
+    return _args;
+}

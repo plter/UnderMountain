@@ -9,4 +9,4 @@ link_libraries(
         um_server
 )
 
-add_executable(Controllers main.cpp ControllerIndex.cpp)
+add_executable(Controllers main.cpp)

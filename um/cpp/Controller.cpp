@@ -6,7 +6,7 @@
 #include "../include/Controller.h"
 #include "../include/um_types.h"
 #include <boost/regex.hpp>
-
+#include <boost/algorithm/string.hpp>
 #include <utility>
 
 const std::string &um::Controller::getName() const {
@@ -20,12 +20,22 @@ void um::Controller::addAction(const std::string &name, um::ControllerAction act
 }
 
 boost::asio::awaitable<void> um::Controller::doAction(const um::RequestSPtr &req, um::ResponseSPtr res) {
-    boost::regex r("^/([^/]*)/([^/]*).*$");
+    static const boost::regex r("^/([^/]*)/([^/]*)(.*$)");
     boost::smatch matcher;
     std::string actionName;
     um::ControllerAction action;
+
     if (boost::regex_match(req->getRequestPath(), matcher, r)) {
         actionName = matcher[2];
+
+        std::string argsString = matcher[3];
+        std::vector<std::string> tokens;
+        boost::split(tokens, argsString, boost::is_any_of("/"));
+        for (auto &t:tokens) {
+            if (!t.empty()) {
+                req->addArg(t);
+            }
+        }
     }
     if (actionName.empty()) {
         actionName = "index";

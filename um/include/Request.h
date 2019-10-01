@@ -71,9 +71,15 @@ namespace um {
 
         void setControllerName(const std::string &controllerName);
 
-        const std::string &getActionName() const;
+        [[nodiscard]] const std::string &getActionName() const;
 
         void setActionName(const std::string &actionName);
+
+        void addArg(std::string arg);
+
+        std::string arg(int index);
+
+        const std::vector<std::string> &getArgs() const;
 
     private:
         TcpStreamSPtr _stream;
@@ -91,6 +97,7 @@ namespace um {
         std::string _sessionId;
         std::string _controllerName;
         std::string _actionName;
+        std::vector<std::string> _args;
     };
 
     typedef std::shared_ptr<Request> RequestSPtr;

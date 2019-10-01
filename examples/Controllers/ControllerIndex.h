@@ -7,9 +7,18 @@
 
 #include <um.h>
 
+#define ACTION [](um::RequestSPtr req,um::ResponseSPtr res)->boost::asio::awaitable<void>
+
 class ControllerIndex : public um::Controller {
 public:
-    ControllerIndex();
+    ControllerIndex() : Controller("index") {
+        addAction("index", ACTION {
+            um::Dumper::dumpStringVector(req->getArgs());
+
+            co_await
+            res->end("Controller index");
+        });
+    };
 };
 
 
