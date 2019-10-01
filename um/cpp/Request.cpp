@@ -141,3 +141,19 @@ int um::Request::getSessionValueAsInt(const std::string &key, int defaultValue) 
 um::AbstractSessionStorageSPtr um::Request::getSessionStorage() const {
     return getServer()->getSessionStorage();
 }
+
+const std::string &um::Request::getControllerName() const {
+    return _controllerName;
+}
+
+void um::Request::setControllerName(const std::string &controllerName) {
+    _controllerName = controllerName;
+}
+
+const std::string &um::Request::getActionName() const {
+    return _actionName;
+}
+
+void um::Request::setActionName(const std::string &actionName) {
+    _actionName = actionName;
+}

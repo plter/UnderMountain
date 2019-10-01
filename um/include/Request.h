@@ -67,6 +67,14 @@ namespace um {
 
         AbstractSessionStorageSPtr getSessionStorage() const;
 
+        const std::string &getControllerName() const;
+
+        void setControllerName(const std::string &controllerName);
+
+        const std::string &getActionName() const;
+
+        void setActionName(const std::string &actionName);
+
     private:
         TcpStreamSPtr _stream;
         BeastHttpStringBodyRequest _beastRequest;
@@ -81,6 +89,8 @@ namespace um {
         std::map<std::string, std::string> _cookie;
         um::Server *_server;
         std::string _sessionId;
+        std::string _controllerName;
+        std::string _actionName;
     };
 
     typedef std::shared_ptr<Request> RequestSPtr;

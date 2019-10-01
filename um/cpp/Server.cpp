@@ -122,4 +122,12 @@ namespace um {
     void Server::setSessionStorage(const AbstractSessionStorageSPtr &sessionStorage) {
         _sessionStorage = sessionStorage;
     }
+
+    const FilterControllersSPtr &Server::getFilterControllers() const {
+        return _filterControllers;
+    }
+
+    void Server::addController(ControllerSPtr controller) {
+        getFilterControllers()->addController(controller);
+    }
 }

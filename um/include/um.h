@@ -21,5 +21,6 @@
 #include "Cookie.h"
 #include "AbstractSessionStorage.h"
 #include "DefaultSessionStorage.h"
+#include "Controller.h"
 
 #endif //UNDERMOUNTAIN_UM_H

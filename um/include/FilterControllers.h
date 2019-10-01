@@ -6,18 +6,19 @@
 #define UNDERMOUNTAIN_FILTERCONTROLLERS_H
 
 #include "AbstractFilter.h"
-#include "AbstractController.h"
+#include "Controller.h"
 #include <map>
+#include <unordered_map>
 
 namespace um {
     class FilterControllers : public um::AbstractFilter {
     public:
         boost::asio::awaitable<void> run(RequestSPtr req, ResponseSPtr res) override;
 
-        void addController(um::AbstractControllerSPtr controller);
+        void addController(const um::ControllerSPtr& controller);
 
     private:
-        std::map<std::string, um::AbstractControllerSPtr> _controllers;
+        std::unordered_map<std::string, um::ControllerSPtr> _controllers;
     };
 
     typedef std::shared_ptr<FilterControllers> FilterControllersSPtr;

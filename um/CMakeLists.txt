@@ -4,6 +4,7 @@ link_libraries(
         boost_coroutine
         boost_log-mt
         boost_filesystem
+        boost_regex
 )
 
 add_library(
@@ -26,4 +27,5 @@ add_library(
         cpp/Cookie.cpp
         cpp/DefaultSessionStorage.cpp
         cpp/FilterControllers.cpp
+        cpp/Controller.cpp
 )

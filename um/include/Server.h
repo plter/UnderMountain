@@ -17,6 +17,7 @@
 #include "FilterChain.h"
 #include "AbstractSessionStorage.h"
 #include "FilterControllers.h"
+#include "Controller.h"
 
 namespace um {
     class Server {
@@ -39,9 +40,13 @@ namespace um {
 
         [[nodiscard]] const FilterChainSPtr &getFilterChain() const;
 
-        const AbstractSessionStorageSPtr getSessionStorage() const;
+        [[nodiscard]] const AbstractSessionStorageSPtr getSessionStorage() const;
 
         void setSessionStorage(const AbstractSessionStorageSPtr &sessionStorage);
+
+        [[nodiscard]] const FilterControllersSPtr &getFilterControllers() const;
+
+        void addController(ControllerSPtr controller);
 
     private:
         unsigned short _port;
