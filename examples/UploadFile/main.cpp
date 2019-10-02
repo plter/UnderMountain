@@ -11,7 +11,6 @@ class ResultController : public um::Controller {
 public:
     explicit ResultController(const std::string &name = "result") : Controller(name) {
         addAction("index", [](um::RequestSPtr req, um::ResponseSPtr res) -> boost::asio::awaitable<void> {
-
             auto data = req->getFormData();
             co_await
             res->end((std::stringstream() << "Name:" << *data["name"] << ",Age:" << *data["age"]).str());

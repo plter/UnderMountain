@@ -17,7 +17,21 @@ namespace um {
 
     class Server;
 
+    class Controller;
+
+    class FilterSession;
+
+    class FilterControllers;
+
     class Request {
+        friend class um::Controller;
+
+        friend class um::Server;
+
+        friend class um::FilterSession;
+
+        friend class um::FilterControllers;
+
     public:
         Request(um::Server *server, TcpStreamSPtr stream);
 
@@ -42,17 +56,13 @@ namespace um {
 
         [[nodiscard]] const URLParameterPairs &getGetVars() const;
 
-        const FormData &getFormData() const;
+        [[nodiscard]] const FormData &getFormData() const;
 
         [[nodiscard]] const std::map<std::string, std::string> &getCookie() const;
-
-        void setCookie(const std::map<std::string, std::string> &cookie);
 
         [[nodiscard]] Server *getServer() const;
 
         [[nodiscard]] const std::string &getSessionId() const;
-
-        void setSessionId(const std::string &sessionId);
 
         std::map<std::string, std::string> &getSession();
 
@@ -68,21 +78,28 @@ namespace um {
 
         void setSessionValue(const std::string &key, int value);
 
-        AbstractSessionStorageSPtr getSessionStorage() const;
+        [[nodiscard]] AbstractSessionStorageSPtr getSessionStorage() const;
 
-        const std::string &getControllerName() const;
+        [[nodiscard]] const std::string &getControllerName() const;
 
-        void setControllerName(const std::string &controllerName);
 
         [[nodiscard]] const std::string &getActionName() const;
 
-        void setActionName(const std::string &actionName);
 
-        void addArg(const std::string& arg);
+        void addArg(const std::string &arg);
 
         std::string arg(int index);
 
         [[nodiscard]] const std::vector<std::string> &getArgs() const;
+
+    private:
+        void setActionName(const std::string &actionName);
+
+        void setControllerName(const std::string &controllerName);
+
+        void setCookie(const std::map<std::string, std::string> &cookie);
+
+        void setSessionId(const std::string &sessionId);
 
     private:
         TcpStreamSPtr _stream;
