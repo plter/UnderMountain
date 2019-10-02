@@ -19,8 +19,13 @@ const std::string &um::FormDataValueItem::getBody() const {
 }
 
 um::FormDataValueItem::FormDataValueItem(
-        std::string name, std::string body, std::string filename
+        std::string name, std::string body, std::string filename, std::string contentType
 ) : _name(std::move(name)),
     _body(std::move(body)),
-    _filename(std::move(filename)) {}
+    _filename(std::move(filename)),
+    _contentType(std::move(contentType)) {}
+
+const std::string &um::FormDataValueItem::getContentType() const {
+    return _contentType;
+}
 

@@ -11,7 +11,7 @@ namespace um {
     class FormDataValueItem {
     public:
 
-        FormDataValueItem(std::string name, std::string body, std::string filename = "");
+        FormDataValueItem(std::string name, std::string body, std::string filename = "", std::string contentType = "");
 
         [[nodiscard]] const std::string &getName() const;
 
@@ -21,11 +21,14 @@ namespace um {
 
         [[nodiscard]] const std::string &getBody() const;
 
+        const std::string &getContentType() const;
+
 
     private:
         std::string _name;
         std::string _filename;
         std::string _body;
+        std::string _contentType;
     };
 }
 

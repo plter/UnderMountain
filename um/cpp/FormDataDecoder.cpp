@@ -16,6 +16,8 @@ um::FormData um::FormDataDecoder::decode(const std::string &content, const std::
     std::string boundaryStartMarker = "--";
     boundaryStartMarker += boundary;
 
+    std::cout << content << std::endl;
+
     size_t boundaryStartMarkerLength = boundaryStartMarker.size();
     size_t position = 0, headerEnd, bodyStart = 0;
     std::string header, body;
@@ -26,20 +28,10 @@ um::FormData um::FormDataDecoder::decode(const std::string &content, const std::
         if (bodyStart > 0 && position > bodyStart) {
             body = content.substr(bodyStart, position - bodyStart);
 
-            static const boost::regex nameR(".* name=\"([^\"]+)\".*");
-            boost::smatch nameM;
-            std::string name;
-            if (boost::regex_match(header, nameM, nameR)) {
-                name = nameM[1];
-            }
-
-            static const boost::regex filenameR(".* filename=\"([^\"]+)\".*");
-            boost::smatch filenameM;
-            std::string filename;
-            if (boost::regex_match(header, filenameM, filenameR)) {
-                filename = filenameM[1];
-            }
-            formData[name].addItem(um::FormDataValueItem(name, body, filename));
+            std::string name = getMatchedChild(header, ".* name=\"([^\"]+)\".*");
+            std::string filename = getMatchedChild(header, ".* filename=\"([^\"]+)\".*");
+            std::string contentType = getMatchedChild(header, ".*Content-Type: ([\\w]+/[\\w-]+).*");
+            formData[name].addItem(um::FormDataValueItem(name, body, filename, contentType));
         }
 
         position += boundaryStartMarkerLength;
@@ -61,4 +53,14 @@ um::FormData um::FormDataDecoder::decode(const std::string &content, const std::
     }
 
     return formData;
+}
+
+std::string um::FormDataDecoder::getMatchedChild(const std::string &content, std::string regex) {
+    boost::regex r(regex);
+    boost::smatch m;
+    std::string result;
+    if (boost::regex_match(content, m, r)) {
+        result = m[1];
+    }
+    return result;
 }

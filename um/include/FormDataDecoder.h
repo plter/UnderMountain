@@ -15,6 +15,8 @@ namespace um {
     class FormDataDecoder {
     public:
         static FormData decode(const std::string &content, const std::string &boundary);
+
+        static std::string getMatchedChild(const std::string& content, std::string regex);
     };
 }
 
