@@ -8,6 +8,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 #include <utility>
+#include <sstream>
 
 um::Response::Response(Server *server, um::TcpStreamSPtr stream) :
         _server(server),
@@ -50,6 +51,10 @@ boost::asio::awaitable<void> um::Response::end(std::string data) {
         _stream->close();
         _headDataSent = true;
     }
+}
+
+boost::asio::awaitable<void> um::Response::end(std::stringstream data) {
+    co_await end(data.str());
 }
 
 boost::beast::http::status um::Response::getHttpState() const {
@@ -152,4 +157,21 @@ bool um::Response::keepAlive() const {
 
 void um::Response::keepAlive(bool keepAlive) {
     _keepAlive = keepAlive;
+}
+
+boost::asio::awaitable<void> um::Response::redirect(std::string url) {
+    setHttpState(boost::beast::http::status::found);
+    set(boost::beast::http::field::location, url);
+    set(boost::beast::http::field::content_type, "text/html");
+
+    co_await end(std::stringstream() << R"(<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Redirecting to <a href=")" << url << R"(">)" << url << R"(</a>
+</body>
+</html>)");
 }

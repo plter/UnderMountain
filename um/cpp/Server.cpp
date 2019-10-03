@@ -111,7 +111,7 @@ namespace um {
                     response->end("Resource not found.");
                     break;
                 }
-            } while (false);
+            } while (0);
 
             UM_LOG(trace) << request->getMethod()
                           << " [" << (unsigned) (response->getHttpState()) << "] "

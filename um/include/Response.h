@@ -7,6 +7,7 @@
 
 #include "um_types.h"
 #include <string>
+#include <sstream>
 #include <boost/asio/awaitable.hpp>
 #include "Request.h"
 #include <boost/beast.hpp>
@@ -26,6 +27,8 @@ namespace um {
         Response(Server *server, TcpStreamSPtr stream);
 
         boost::asio::awaitable<void> end(std::string data);
+
+        boost::asio::awaitable<void> end(std::stringstream data);
 
         boost::asio::awaitable<void> render(std::string viewName, um::ViewData data);
 
@@ -50,6 +53,8 @@ namespace um {
         [[nodiscard]] bool keepAlive() const;
 
         [[nodiscard]] unsigned int getVersion() const;
+
+        boost::asio::awaitable<void> redirect(std::string url);
 
     private://private methods
         void buildMimeTypeMap();
