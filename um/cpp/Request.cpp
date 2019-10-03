@@ -13,6 +13,7 @@
 #include <boost/algorithm/string.hpp>
 #include <vector>
 
+
 namespace beast = boost::beast;
 namespace http = beast::http;
 
@@ -24,7 +25,11 @@ um::Request::Request(um::Server *server, um::TcpStreamSPtr stream) :
 boost::asio::awaitable<void> um::Request::asyncInit() {
     beast::flat_buffer buffer;
     _beastRequest = BeastHttpStringBodyRequest();
-    co_await http::async_read(*_stream, buffer, _beastRequest, boost::asio::use_awaitable);
+
+    http::request_parser<http::string_body> parser;
+    parser.body_limit(_server->getRequestBodyLimit());
+    co_await http::async_read(*_stream, buffer, parser, boost::asio::use_awaitable);
+    _beastRequest = parser.get();
 
     _target = _beastRequest.target().to_string();
     _method = _beastRequest.method();

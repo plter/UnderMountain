@@ -29,6 +29,7 @@ namespace um {
             _port(port),
             _handler(std::move(handler)),
             _io(),
+            _requestBodyLimit(1 * 1024 * 1024),
             _filterChain(std::make_shared<um::FilterChain>()) {
 
         setSessionStorage(std::make_shared<um::DefaultSessionStorage>());
@@ -130,5 +131,13 @@ namespace um {
 
     void Server::addController(ControllerSPtr controller) {
         getFilterControllers()->addController(controller);
+    }
+
+    size_t Server::getRequestBodyLimit() const {
+        return _requestBodyLimit;
+    }
+
+    void Server::setRequestBodyLimit(size_t requestBodyLimit) {
+        _requestBodyLimit = requestBodyLimit;
     }
 }

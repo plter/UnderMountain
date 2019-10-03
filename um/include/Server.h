@@ -48,6 +48,17 @@ namespace um {
 
         void addController(ControllerSPtr controller);
 
+        /**
+         * @return The request body size, in bytes ,default is 1M
+         */
+        [[nodiscard]] size_t getRequestBodyLimit() const;
+
+        /**
+         * The request body size, in bytes ,default is 1M
+         * @param requestBodyLimit
+         */
+        void setRequestBodyLimit(size_t requestBodyLimit);
+
     private:
         unsigned short _port;
         boost::asio::io_context _io;
@@ -56,6 +67,7 @@ namespace um {
         FilterChainSPtr _filterChain;
         um::AbstractSessionStorageSPtr _sessionStorage;
         um::FilterControllersSPtr _filterControllers;
+        size_t _requestBodyLimit;
 
     private:
         boost::asio::awaitable<void> umServerListener();
