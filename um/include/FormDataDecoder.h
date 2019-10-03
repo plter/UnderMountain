@@ -8,6 +8,7 @@
 #include "FormDataValue.h"
 #include <map>
 #include <string>
+#include <boost/regex.hpp>
 
 namespace um {
     typedef std::map<std::string, um::FormDataValue> FormData;
@@ -16,7 +17,7 @@ namespace um {
     public:
         static FormData decode(const std::string &content, const std::string &boundary);
 
-        static std::string getMatchedChild(const std::string& content, std::string regex);
+        static std::string getMatchedChild(const std::string &content, const boost::regex& regex);
     };
 }
 

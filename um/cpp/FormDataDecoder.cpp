@@ -16,11 +16,12 @@ um::FormData um::FormDataDecoder::decode(const std::string &content, const std::
     std::string boundaryStartMarker = "--";
     boundaryStartMarker += boundary;
 
-    std::cout << content << std::endl;
-
     size_t boundaryStartMarkerLength = boundaryStartMarker.size();
     size_t position = 0, headerEnd, bodyStart = 0;
     std::string header, body;
+    static const boost::regex nameR(".* name=\"([^\"]+)\".*");
+    static const boost::regex filenameR(".* filename=\"([^\"]+)\".*");
+    static const boost::regex contentTypeR(".*Content-Type: ([\\w]+/[\\w-]+).*");
 
     FormData formData;
 
@@ -28,9 +29,9 @@ um::FormData um::FormDataDecoder::decode(const std::string &content, const std::
         if (bodyStart > 0 && position > bodyStart) {
             body = content.substr(bodyStart, position - bodyStart);
 
-            std::string name = getMatchedChild(header, ".* name=\"([^\"]+)\".*");
-            std::string filename = getMatchedChild(header, ".* filename=\"([^\"]+)\".*");
-            std::string contentType = getMatchedChild(header, ".*Content-Type: ([\\w]+/[\\w-]+).*");
+            std::string name = getMatchedChild(header, nameR);
+            std::string filename = getMatchedChild(header, filenameR);
+            std::string contentType = getMatchedChild(header, contentTypeR);
             formData[name].addItem(um::FormDataValueItem(name, body, filename, contentType));
         }
 
@@ -55,8 +56,7 @@ um::FormData um::FormDataDecoder::decode(const std::string &content, const std::
     return formData;
 }
 
-std::string um::FormDataDecoder::getMatchedChild(const std::string &content, std::string regex) {
-    boost::regex r(regex);
+std::string um::FormDataDecoder::getMatchedChild(const std::string &content, const boost::regex& r) {
     boost::smatch m;
     std::string result;
     if (boost::regex_match(content, m, r)) {
