@@ -18,9 +18,12 @@ namespace um {
 
     class Server;
 
+
     class Response {
+        friend class um::Server;
+
     public:
-        Response(Server *server, TcpStreamSPtr stream, RequestSPtr request);
+        Response(Server *server, TcpStreamSPtr stream);
 
         boost::asio::awaitable<void> end(std::string data);
 
@@ -44,20 +47,29 @@ namespace um {
 
         boost::asio::awaitable<void> sendFile(const std::string &filePath);
 
+        [[nodiscard]] bool keepAlive() const;
+
+        [[nodiscard]] unsigned int getVersion() const;
+
     private://private methods
         void buildMimeTypeMap();
 
         std::string getMimeType(std::string file);
 
+        void setVersion(unsigned int version);
+
+        void keepAlive(bool keepAlive);
+
     private:
         TcpStreamSPtr _stream;
-        RequestSPtr _request;
         Server *_server;
         bool _headDataSent;// 第一批数据是否已发送
         std::any _beastResponse;
         boost::beast::http::status _httpState;
         std::map<boost::beast::http::field, std::string> _responseHeaders;
         std::map<std::string, std::string> _mimeTypeMap;
+        unsigned _version;
+        bool _keepAlive;
     };
 
     typedef std::shared_ptr<Response> ResponseSPtr;

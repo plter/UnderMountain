@@ -16,6 +16,7 @@
 #include "../include/DefaultSessionStorage.h"
 #include "../include/FilterControllers.h"
 #include "../include/Logger.h"
+#include <boost/system/system_error.hpp>
 
 using namespace boost;
 using namespace boost::asio::ip;
@@ -67,27 +68,50 @@ namespace um {
     boost::asio::awaitable<void> Server::asyncSessionHandler(TcpStreamSPtr stream) {
         try {
             auto request = std::make_shared<Request>(this, stream);
-            co_await
-            request->asyncInit();
+            um::ResponseSPtr response = std::make_shared<Response>(this, stream);
 
-            auto response = std::make_shared<Response>(this, stream, request);
-
-            co_await
-            _filterChain->run(request, response);
-
-            if (!response->isHeaderSent()) {
-                if (_handler) {
+            do {
+                try {
                     co_await
-                    this->_handler(request, response);
-                }
-            }
+                    request->asyncInit();
+                } catch (boost::system::system_error &e) {
+                    UM_LOG(warning) << "what=" << e.what() << ",code=" << e.code();
 
-            //After all task done, if the header still not send, we response a 404 page.
-            if (!response->isHeaderSent()) {
-                response->setHttpState(boost::beast::http::status::not_found);
-                co_await
-                response->end("Resource not found.");
-            }
+                    if (e.code() == http::error::body_limit) {
+                        response->setHttpState(boost::beast::http::status::payload_too_large);
+                        response->end("Payload too large");
+                        break;
+                    }
+                }
+
+                if (!response->isHeaderSent()) {
+
+                    response->setVersion(request->getBeastRequest().version());
+                    response->keepAlive(request->getBeastRequest().keep_alive());
+
+                    co_await
+                    _filterChain->run(request, response);
+                } else {
+                    break;
+                }
+
+                if (!response->isHeaderSent()) {
+                    if (_handler) {
+                        co_await
+                        this->_handler(request, response);
+                    }
+                } else {
+                    break;
+                }
+
+                //After all task done, if the header still not send, we response a 404 page.
+                if (!response->isHeaderSent()) {
+                    response->setHttpState(boost::beast::http::status::not_found);
+                    co_await
+                    response->end("Resource not found.");
+                    break;
+                }
+            } while (false);
 
             UM_LOG(trace) << request->getMethod()
                           << " [" << (unsigned) (response->getHttpState()) << "] "

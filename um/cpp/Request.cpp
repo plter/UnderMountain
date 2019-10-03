@@ -18,7 +18,7 @@ namespace beast = boost::beast;
 namespace http = beast::http;
 
 um::Request::Request(um::Server *server, um::TcpStreamSPtr stream) :
-        _stream(std::move(stream)), _method(http::verb::get) {
+        _stream(std::move(stream)), _method(http::verb::unknown) {
     _server = server;
 }
 

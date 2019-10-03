@@ -9,12 +9,13 @@
 #include <boost/algorithm/string.hpp>
 #include <utility>
 
-um::Response::Response(Server *server, um::TcpStreamSPtr stream, RequestSPtr request) :
+um::Response::Response(Server *server, um::TcpStreamSPtr stream) :
         _server(server),
         _stream(std::move(stream)),
         _headDataSent(false),
-        _request(std::move(request)),
-        _httpState(boost::beast::http::status::ok) {
+        _httpState(boost::beast::http::status::ok),
+        _keepAlive(false),
+        _version(11) {
 
     set(boost::beast::http::field::content_type, "text/html");
     set(boost::beast::http::field::server, UM_SERVER_INFO);
@@ -34,7 +35,7 @@ boost::asio::awaitable<void> um::Response::end(std::string data) {
     if (!_headDataSent) {
         auto response = BeastHttpStringBodyResponse(
                 _httpState,
-                _request->getBeastRequest().version()
+                _version
         );
 
         _beastResponse = response;
@@ -42,7 +43,7 @@ boost::asio::awaitable<void> um::Response::end(std::string data) {
         for (auto const&[key, val]:_responseHeaders) {
             response.set(key, val);
         }
-        response.keep_alive(_request->getBeastRequest().keep_alive());
+        response.keep_alive(_keepAlive);
         response.body() = data;
         response.prepare_payload();
         co_await boost::beast::http::async_write(*_stream, response, boost::asio::use_awaitable);
@@ -93,12 +94,12 @@ boost::asio::awaitable<void> um::Response::sendFile(const std::string &filePath)
         boost::beast::http::response<boost::beast::http::file_body> response(
                 std::piecewise_construct,
                 std::make_tuple(std::move(body)),
-                std::make_tuple(boost::beast::http::status::ok, _request->getBeastRequest().version())
+                std::make_tuple(boost::beast::http::status::ok, _version)
         );
         response.set(boost::beast::http::field::server, UM_SERVER_INFO);
         response.set(boost::beast::http::field::content_type, getMimeType(filePath));
         response.set(boost::beast::http::field::content_length, size);
-        response.keep_alive(_request->getBeastRequest().keep_alive());
+        response.keep_alive(_keepAlive);
         co_await boost::beast::http::async_write(*_stream, response, boost::asio::use_awaitable);
         _headDataSent = true;
     }
@@ -135,4 +136,20 @@ std::string um::Response::getMimeType(std::string file) {
         return mimeType;
     }
     return "application/text";
+}
+
+unsigned int um::Response::getVersion() const {
+    return _version;
+}
+
+void um::Response::setVersion(unsigned int version) {
+    _version = version;
+}
+
+bool um::Response::keepAlive() const {
+    return _keepAlive;
+}
+
+void um::Response::keepAlive(bool keepAlive) {
+    _keepAlive = keepAlive;
 }
