@@ -5,6 +5,7 @@ services:
   db:
     image: mariadb
     restart: always
+    tty: true
     environment:
       MYSQL_ROOT_PASSWORD: example
     ports:
