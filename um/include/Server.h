@@ -59,9 +59,20 @@ namespace um {
          */
         void setRequestBodyLimit(size_t requestBodyLimit);
 
+        [[nodiscard]] int getConcurrencyHint() const;
+
+        /**
+         * If you want to change this value, this method should be called before start()
+         * @param concurrencyHint
+         */
+        void setConcurrencyHint(int concurrencyHint);
+
+        [[nodiscard]] const IOContextSPtr &getIOContext() const;
+
     private:
+        int _concurrencyHint;
         unsigned short _port;
-        boost::asio::io_context _io;
+        IOContextSPtr _ioContext;
         UMServerHandler _handler;
         AbstractViewEngineSPtr _viewEngine;
         FilterChainSPtr _filterChain;

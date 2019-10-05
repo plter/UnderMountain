@@ -29,7 +29,7 @@ namespace um {
     Server::Server(int port, UMServerHandler handler) :
             _port(port),
             _handler(std::move(handler)),
-            _io(),
+            _concurrencyHint(10),
             _requestBodyLimit(1 * 1024 * 1024),
             _filterChain(std::make_shared<um::FilterChain>()) {
 
@@ -131,10 +131,11 @@ namespace um {
 
     void Server::start() {
 
-        boost::asio::signal_set signals(_io, SIGINT, SIGTERM);
-        signals.async_wait([&](auto, auto) { _io.stop(); });
-        co_spawn(_io, std::bind(&Server::umServerListener, this), detached);
-        _io.run();
+        _ioContext = std::make_shared<boost::asio::io_context>(getConcurrencyHint());
+        boost::asio::signal_set signals(*_ioContext, SIGINT, SIGTERM);
+        signals.async_wait([&](auto, auto) { _ioContext->stop(); });
+        co_spawn(*_ioContext, std::bind(&Server::umServerListener, this), detached);
+        _ioContext->run();
     }
 
     const FilterChainSPtr &Server::getFilterChain() const {
@@ -163,5 +164,17 @@ namespace um {
 
     void Server::setRequestBodyLimit(size_t requestBodyLimit) {
         _requestBodyLimit = requestBodyLimit;
+    }
+
+    int Server::getConcurrencyHint() const {
+        return _concurrencyHint;
+    }
+
+    void Server::setConcurrencyHint(int concurrencyHint) {
+        _concurrencyHint = concurrencyHint;
+    }
+
+    const IOContextSPtr &Server::getIOContext() const {
+        return _ioContext;
     }
 }

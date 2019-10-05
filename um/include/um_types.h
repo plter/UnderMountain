@@ -17,6 +17,7 @@
 namespace um {
     typedef boost::beast::tcp_stream TcpStream;
     typedef std::shared_ptr<TcpStream> TcpStreamSPtr;
+    typedef std::shared_ptr<boost::asio::io_context> IOContextSPtr;
     typedef boost::beast::http::request<boost::beast::http::string_body> BeastHttpStringBodyRequest;
     typedef boost::beast::http::response<boost::beast::http::string_body> BeastHttpStringBodyResponse;
 }
